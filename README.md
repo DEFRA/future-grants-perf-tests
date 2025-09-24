@@ -1,4 +1,4 @@
-# cdp-perf-test-suite-template
+# future-grants-perf-tests
 
 A JMeter based test runner for the CDP Platform.
 
