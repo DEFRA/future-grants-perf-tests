@@ -1,0 +1,33 @@
+// Run below script in GAS and the CW mongosh terminal.
+print("🔍 Starting scan and cleanup of test references...\n");
+
+db.getCollectionNames().forEach((collection) => {
+  // Skip system collections
+  if (collection.startsWith("system.")) {
+    return;
+  }
+
+  const cursor = db.getCollection(collection).find({
+    $where: function () {
+      const docStr = JSON.stringify(this);
+      return docStr.includes("perf-test-client-ref") ||
+             docStr.includes("frps-perf-test-client-ref") ||
+             docStr.includes("client") ||
+             docStr.includes("client-perf");
+    }
+  });
+
+  let count = 0;
+
+  cursor.forEach((doc) => {
+    db.getCollection(collection).deleteOne({ _id: doc._id });
+    print(`🗑️ Deleted from ${collection}: ${doc._id}`);
+    count++;
+  });
+
+  if (count > 0) {
+    print(`✅ ${count} matching docs deleted from: ${collection}\n`);
+  }
+});
+
+print("\n🎉 Cleanup complete!");

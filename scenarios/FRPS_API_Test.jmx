@@ -29,8 +29,8 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="FRPS API Thread Group">
-        <intProp name="ThreadGroup.num_threads">10</intProp>
-        <intProp name="ThreadGroup.ramp_time">10</intProp>
+        <intProp name="ThreadGroup.num_threads">15</intProp>
+        <intProp name="ThreadGroup.ramp_time">8</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
@@ -39,7 +39,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Case Data CSV Config" enabled="true">
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Case Data CSV Config">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="filename">../test-data/perf_test_case_refs_frps.csv</stringProp>
@@ -51,7 +51,7 @@
           <stringProp name="variableNames">caseRef,_id</stringProp>
         </CSVDataSet>
         <hashTree/>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
           <stringProp name="HTTPSampler.domain">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
@@ -62,22 +62,22 @@
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
           <collectionProp name="Arguments.arguments">
             <elementProp name="JWT_TOKEN" elementType="Argument">
               <stringProp name="Argument.name">JWT_TOKEN</stringProp>
-              <stringProp name="Argument.value">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6InlFVXdtWFdMMTA3Q2MtN1FaMldTYmVPYjNzUSIsImtpZCI6InlFVXdtWFdMMTA3Q2MtN1FaMldTYmVPYjNzUSJ9.eyJhdWQiOiJhcGk6Ly83NjBlMGM5OS1mODRhLTQ1ZTYtOWQ2MC00NzUwZmI1MDhhZmQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83NzBhMjQ1MC0wMjI3LTRjNjItOTBjNy00ZTM4NTM3ZjExMDIvIiwiaWF0IjoxNzYxNTYwNTc1LCJuYmYiOjE3NjE1NjA1NzUsImV4cCI6MTc2MTU2NTYwMCwiYWNyIjoiMSIsImFpbyI6IkFYUUFpLzhhQUFBQXVVTWVaZDlMUnVqV0RiMU1qSUZtVmVxRDFVaWlFWWljWDh0M1grdkpvRFhKYUZDNTYzalA5MC9zUDBsMDc5ZHNvOXE0ZlFNOUI2a0o3TmdlYWduc0ZFRi9ISjdCRkNLdWxPeFZDNzYxaXRnbUlTWmVLSDRuckJiWFQ5NGk2VEw4cWYzb01ESnNURTJ0NHNUQ1NRK0s2QT09IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6Ijc2MGUwYzk5LWY4NGEtNDVlNi05ZDYwLTQ3NTBmYjUwOGFmZCIsImFwcGlkYWNyIjoiMSIsImVtYWlsIjoiU0EtRkdDVy5BRE1JTkBkZWZyYS5vbm1pY3Jvc29mdC5jb20iLCJmYW1pbHlfbmFtZSI6IkFETUlOIiwiZ2l2ZW5fbmFtZSI6IlNBLUZHQ1ciLCJpcGFkZHIiOiIxOTQuMTY4LjQ0LjUwIiwibmFtZSI6IlNBLUZHQ1cgQURNSU4gKEVxdWFsIEV4cGVydHMpIiwib2lkIjoiMjcxZTczYzQtYzg2NC00YjE3LWIxYmUtNjg1NzBkNjBjOTBhIiwicmgiOiIxLkFRd0FVQ1FLZHljQ1lreVF4MDQ0VTM4UkFwa01EblpLLU9aRm5XQkhVUHRRaXYwTUFEVU1BQS4iLCJyb2xlcyI6WyJGQ1AuQ2FzZXdvcmsuQWRtaW4iXSwic2NwIjoiY3cuYmFja2VuZCIsInNpZCI6IjAwOWNiZDE5LTIyYjUtYzg1ZC0xZjkzLTQyNDFjYjU0ZTcyMSIsInN1YiI6Im1TU2hEY0VHVWhLdk9GZm5Hbm9DYWlnYU43RmtPem4yUWJkdTB1QWphMEEiLCJ0aWQiOiI3NzBhMjQ1MC0wMjI3LTRjNjItOTBjNy00ZTM4NTM3ZjExMDIiLCJ1bmlxdWVfbmFtZSI6IlNBLUZHQ1cuQURNSU5AZGVmcmEub25taWNyb3NvZnQuY29tIiwidXBuIjoiU0EtRkdDVy5BRE1JTkBkZWZyYS5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiJjLXdKNC1vQWEwS1BPbmtoN214WUFBIiwidmVyIjoiMS4wIiwieG1zX2Z0ZCI6IkpGOFhCM0I2b2dQNFRzaVo0QWQtbnNPWEdSaF91YW9Cb2QyMERUMWdPZmdCYzNkbFpHVnVZeTFrYzIxeiJ9.DGVLVqdkVeZCpjHVKb-xzRAl6QX0t63oI2Rdp10oET4g-8skPjf9bRi1FUL6rQ7peK6kf5lV2hGjSKo9SAMWqvJoG1HRWHBR47ChVy3e-WsLj7Jb__A7L1ViSR7WloPDVB3FIl9f08YDy1srMsmKcDPEnHA7Wsb8kcl8zelHT4rb2czmHalo7R_fdgHJGi7L7zpt1Xquuh-tVkuqy9FJUZdMIQl700gP9oeLdvYYG-zXv2anEXX2N-yaT7hZ4hU_Gukm87P3y83znM0Kn56vsyXDPIHrb4pCKfP_c5GNEW1V0jXDwBLkczoHhhCA6w19gmvdY1ZxTgGtII-RrCA96w</stringProp>
+              <stringProp name="Argument.value">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyIsImtpZCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyJ9.eyJhdWQiOiJhcGk6Ly83NjBlMGM5OS1mODRhLTQ1ZTYtOWQ2MC00NzUwZmI1MDhhZmQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83NzBhMjQ1MC0wMjI3LTRjNjItOTBjNy00ZTM4NTM3ZjExMDIvIiwiaWF0IjoxNzYzMTMxMTYzLCJuYmYiOjE3NjMxMzExNjMsImV4cCI6MTc2MzEzNjAyNywiYWNyIjoiMSIsImFpbyI6IkFiUUFTLzhhQUFBQUhOV0h2U1h0SUxjMHdLY1ZPS0JUQ3ZZdnR1V1FoeXlmdWVyY241NEdLbGtqK2RpbmkzU3dKR3VTdmNLa2xteEhseHdKWHBqRFNua1ZoVStMOVR6VjZTZkcyMzVLb3ZhakUrTyt6VmkvWkhpYTg3dGdiZVlRU2NTcHhMcEJtNGY5SUVYdjVneXQ3Uk55MVI2akdXWFhyVVRBamRuTmxEcXZLc2JKYUJSd2x0NnR1K09nRWRYZFVSckEzbVBjOWluNTJuU2N1QjdhVnJSMFdPejcwMkdIRVNqTENtVTZnM0dBbEdMcU9odnJqMEE9IiwiYW1yIjpbIm90cCJdLCJhcHBpZCI6Ijc2MGUwYzk5LWY4NGEtNDVlNi05ZDYwLTQ3NTBmYjUwOGFmZCIsImFwcGlkYWNyIjoiMSIsImVtYWlsIjoibml0aW4ubWFsaUBlcXVhbGV4cGVydHMuY29tIiwiaWRwIjoibWFpbCIsImlwYWRkciI6IjIxMi41Ni4xMDcuMTM2IiwibmFtZSI6Im5pdGluLm1hbGkgKEd1ZXN0KSIsIm9pZCI6ImFiMzhmZDdmLTllZjQtNDQzYy05NWQ1LTM4MzUwZGFhNzc2ZCIsInJoIjoiMS5BUXdBVUNRS2R5Y0NZa3lReDA0NFUzOFJBcGtNRG5aSy1PWkZuV0JIVVB0UWl2ME1BT2NNQUEuIiwicm9sZXMiOlsiRkNQLkNhc2V3b3JrLkFkbWluIl0sInNjcCI6ImN3LmJhY2tlbmQiLCJzaWQiOiIwMGFhMDM4OS05MWNmLWEzYzItNTMyZC1jNTJmMjBhYmNkZjgiLCJzdWIiOiJxZVp4NXlFeGxtS1BYTXRBUGRNTTN6dWVjQ2Jqc1FZaXdNTE5HdDlIRGpjIiwidGlkIjoiNzcwYTI0NTAtMDIyNy00YzYyLTkwYzctNGUzODUzN2YxMTAyIiwidW5pcXVlX25hbWUiOiJtYWlsI25pdGluLm1hbGlAZXF1YWxleHBlcnRzLmNvbSIsInV0aSI6IkMyVFFlUTZzTkVPZml1MzZ6OEFWQUEiLCJ2ZXIiOiIxLjAiLCJ4bXNfZnRkIjoiN0ZHTWo4aS0zRkdkbnBrZlZsRzFCS1U1dmMtTVJIZmlVcjdVTEk2NG1CVUJaWFZ5YjNCbGQyVnpkQzFrYzIxeiJ9.Xu7FItt7wpbnZvRy5g95zVPTe2jUE1kjKBOAZfqRCSEtLVQPAbHL2N7aNRDVEm22610O01SCrQ6WIlXs0zepx4FzfMA_EwoGDKQ2ShnaFJY0f97a4hCCU4YDiUhQleKyBmCsIVUh_4TdhKL4NEGwFwwGHP-me_XCmOkmfb--jETYzzA2V5j4aZl6MqxkYYnaEAh_hI_FjV8RfpD1_ScM3JNnizW1zgWG-smKqdhc8GdB1Vl464h8JyA_zA32M3_3pZzrksQYlQaX3Ex-eO0mM7uucVAHMq241dnqYUa-_RFQdQPpWb-Z0I2QHJa9XlfyUSaxUVxnIX1FBhV4fpeeXQ</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="X_API_KEY" elementType="Argument">
               <stringProp name="Argument.name">X_API_KEY</stringProp>
-              <stringProp name="Argument.value">OqlXiroDUXGNSNXa1dzYgWui46edm9DF</stringProp>
+              <stringProp name="Argument.value">mbRqR1ywD475dR9wz5YYQa4vtTz4ojj7</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Accept</stringProp>
@@ -102,7 +102,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Get All Cases" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Get All Cases">
           <stringProp name="HTTPSampler.path">/fg-cw-backend/cases</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -129,7 +129,7 @@
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. Get Case Details" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="2. Get Case Details">
           <stringProp name="HTTPSampler.path">/fg-cw-backend/cases/${_id}</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -274,7 +274,7 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7. Complete Simple Review Task" enabled="true">
-          <stringProp name="HTTPSampler.path">/fg-cw-backend/cases/${_id}/stages/application-receipt/task-groups/application-receipt-tasks/tasks/simple-review/status</stringProp>
+          <stringProp name="HTTPSampler.path">/fg-cw-backend/cases/${_id}/phases/default/stages/application-receipt/task-groups/application-receipt-tasks/tasks/simple-review/status</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">PATCH</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -284,8 +284,46 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
+  &quot;completed&quot;: true,&#xd;
   &quot;status&quot;: &quot;complete&quot;,&#xd;
   &quot;comment&quot;: &quot;Simple review completed via performance test&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Status Code 200" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1447184276">200|204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">0</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="7.1. Complete Detail Review Task" enabled="true">
+          <stringProp name="HTTPSampler.path">/fg-cw-backend/cases/${_id}/phases/default/stages/application-receipt/task-groups/application-receipt-tasks/tasks/detail-review/status</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">PATCH</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;completed&quot;: true,&#xd;
+  &quot;status&quot;: &quot;complete&quot;,&#xd;
+  &quot;comment&quot;: &quot;Detail review completed via performance test&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -346,7 +384,7 @@
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
-        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Extra Delay Before Case Details Tab" enabled="true">
+        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Extra Delay Before Case Details Tab">
           <stringProp name="ConstantTimer.delay">10000</stringProp>
           <stringProp name="RandomTimer.range">0</stringProp>
         </UniformRandomTimer>
@@ -453,7 +491,34 @@
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. Get Agreements Tab" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="10.1. Get Case Details Before Agreements">
+          <stringProp name="HTTPSampler.path">/fg-cw-backend/cases/${_id}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Status Code 200" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">0</stringProp>
+          </UniformRandomTimer>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="11. Get Agreements Tab">
           <stringProp name="HTTPSampler.path">/fg-cw-backend/cases/${_id}/tabs/agreements</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -512,7 +577,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -625,7 +690,7 @@
         <hashTree/>
         <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results"/>
         <hashTree/>
-        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph">
+        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -662,7 +727,7 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer">
+        <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
