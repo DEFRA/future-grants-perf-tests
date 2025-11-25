@@ -38,7 +38,7 @@ permissions:
 jobs:
   gas-api-performance-test:
     name: GAS API Performance Test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Use CDP self-hosted runners
     
     steps:
       - name: Check out code
@@ -50,13 +50,19 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Install JMeter
+      - name: Setup JMeter
         run: |
-          wget https://downloads.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz
-          tar -xzf apache-jmeter-5.6.3.tgz
-          sudo mv apache-jmeter-5.6.3 /opt/jmeter
-          sudo ln -s /opt/jmeter/bin/jmeter /usr/local/bin/jmeter
-          echo "JMeter installed successfully"
+          # Check if JMeter is already installed
+          if command -v jmeter &> /dev/null; then
+            echo "✅ JMeter already installed: $(jmeter --version | head -1)"
+          else
+            echo "📥 Installing JMeter..."
+            wget https://downloads.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz
+            tar -xzf apache-jmeter-5.6.3.tgz
+            sudo mv apache-jmeter-5.6.3 /opt/jmeter
+            sudo ln -s /opt/jmeter/bin/jmeter /usr/local/bin/jmeter
+            echo "✅ JMeter installed successfully"
+          fi
           jmeter --version
 
       - name: Set environment secrets
