@@ -2,18 +2,23 @@
 
 # Script to create 50 FRPS grant applications for performance testing
 
-# BASE_URL="https://fg-gas-backend.perf-test.cdp-int.defra.cloud/grants/frps-private-beta/applications"
 BASE_URL=https://ephemeral-protected.api.dev.cdp-int.defra.cloud/fg-gas-backend/grants/frps-private-beta/applications
+# BASE_URL=https://ephemeral-protected.api.test.cdp-int.defra.cloud/fg-gas-backend/grants/frps-private-beta/applications
 
 # API authentication parameters
-X_API_KEY="1mfGefxNGpQ6Y2lmeUBAYuHIoC0mMqk7"
-BEARER_TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyIsImtpZCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyJ9.eyJhdWQiOiJhcGk6Ly83NjBlMGM5OS1mODRhLTQ1ZTYtOWQ2MC00NzUwZmI1MDhhZmQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83NzBhMjQ1MC0wMjI3LTRjNjItOTBjNy00ZTM4NTM3ZjExMDIvIiwiaWF0IjoxNzYzMTE2NjgzLCJuYmYiOjE3NjMxMTY2ODMsImV4cCI6MTc2MzEyMTg3MiwiYWNyIjoiMSIsImFpbyI6IkFiUUFTLzhhQUFBQU1UWGJTQ3BKd2xrbEhPNHY1R2VmRDhHcDN5YjNXWnBKL255TkhPVFBVbVh2U1RQa0M0K3NxNy95Zk9WZmVjaWtOMzJYY1E1WDYwMDJrWFJ5SjBVTm8yM1NVeXJ2ZEJlQ2Z0U1h0dDF4R2F5bW9SUHZNYVRtOW40Z1FTSVNtMzFscnBhTCsyaHhNZEFoU1hiRzFZVmlIQ0VJV2s5RG9McjNnYUt0aThBZUpkVDJCbGZKZmdVTEx2K3hRR2hQc21acngycnlmYU1JbUJJTGIwb1BYV2hWUXJ0R2luU1NKZHovRjVFeTFIaE1PcDQ9IiwiYW1yIjpbIm90cCJdLCJhcHBpZCI6Ijc2MGUwYzk5LWY4NGEtNDVlNi05ZDYwLTQ3NTBmYjUwOGFmZCIsImFwcGlkYWNyIjoiMSIsImVtYWlsIjoibml0aW4ubWFsaUBlcXVhbGV4cGVydHMuY29tIiwiaWRwIjoibWFpbCIsImlwYWRkciI6IjIxMi41Ni4xMDcuMTM2IiwibmFtZSI6Im5pdGluLm1hbGkgKEd1ZXN0KSIsIm9pZCI6ImFiMzhmZDdmLTllZjQtNDQzYy05NWQ1LTM4MzUwZGFhNzc2ZCIsInJoIjoiMS5BUXdBVUNRS2R5Y0NZa3lReDA0NFUzOFJBcGtNRG5aSy1PWkZuV0JIVVB0UWl2ME1BT2NNQUEuIiwicm9sZXMiOlsiRkNQLkNhc2V3b3JrLkFkbWluIl0sInNjcCI6ImN3LmJhY2tlbmQiLCJzaWQiOiIwMGFhMDM4OS05MWNmLWEzYzItNTMyZC1jNTJmMjBhYmNkZjgiLCJzdWIiOiJxZVp4NXlFeGxtS1BYTXRBUGRNTTN6dWVjQ2Jqc1FZaXdNTE5HdDlIRGpjIiwidGlkIjoiNzcwYTI0NTAtMDIyNy00YzYyLTkwYzctNGUzODUzN2YxMTAyIiwidW5pcXVlX25hbWUiOiJtYWlsI25pdGluLm1hbGlAZXF1YWxleHBlcnRzLmNvbSIsInV0aSI6Il81WVN1WnJESGtXLWN2VDR2bk5kQUEiLCJ2ZXIiOiIxLjAiLCJ4bXNfZnRkIjoiMEx4eExUZmxxQkhrN2o5Wkw0RnJ4UWl2YVNTZzdlUHI5M2pKcEFOVWNLb0JjM2RsWkdWdVl5MWtjMjF6In0.iHlxAg-95TW71GaaP3PxsyWOQ9R7Rr6IM2afLGP9PfeumUUAuGi_VEBel72BTCRbRq3sWPNAbJd5knZ9XhW0-nee72t7ADTQ3wesCnHj2sru6wUPDeJUVgWwKbz6B8gDQH4Fgux4sM4BDpTEXRYhlcSwKK3YHJqqWHH5yXnxFp1JmkqJkJqcTTgDmtTsfC4SVjZKUUOplEHf7jkiXS5Via7Znt9iWIAb3yL4JX_7BZbYAbyhriHzebBNHgM17bQU9YFvN5fmQD7WaNFgbO2yF_HkjobGvCJoB4k-MfrQakCKFALlWvnCM8HYuXBcaNDT5Xjngf1mWlCh0KjXyDP4mg"
+X_API_KEY="TURdeM555elEbIwb6GepzG1vVjPngLuG"
+BEARER_TOKEN="7d2caf6f-eed0-4b67-abe0-c03ff33111b9"
 echo "Creating 50 FRPS grant applications..."
+
+# X_API_KEY="5E85pOvnqROHsNbX3NYTWorO5DxK9QFw"
+# BEARER_TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyIsImtpZCI6InJ0c0ZULWItN0x1WTdEVlllU05LY0lKN1ZuYyJ9.eyJhdWQiOiJhcGk6Ly83NjBlMGM5OS1mODRhLTQ1ZTYtOWQ2MC00NzUwZmI1MDhhZmQiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83NzBhMjQ1MC0wMjI3LTRjNjItOTBjNy00ZTM4NTM3ZjExMDIvIiwiaWF0IjoxNzYzNTUyNjY5LCJuYmYiOjE3NjM1NTI2NjksImV4cCI6MTc2MzU1Nzg3MiwiYWNyIjoiMSIsImFpbyI6IkFiUUFTLzhhQUFBQUJ3RVB5R1o5amdjTkRUTHVEYnpJZXRzcXFTWGJFVjFxdmpwVStHdGJwcEJkbit1dU5rY1poTlZMTjhlTXg5MjM2SnVvMGR0TTYvUEhIOWJEdVNyajRXdkJ4RlFZOGtsZzE5aDZ6aGJRVFd2R3diSmsxZVZiNmpzUEUyVjgwMGtsbERHNTkwRjJMZFRKVktxak5jMk5BeFozd3JOYno2NEgwSENDNWF4UTZzRW1LWUxFdnZpZU95d0xkVUtqWHZmUUwzUitQYVZNZFRERjhwWE04Rjc5MHQ1RVVzdzRIL3h2ajZSV2dZbDdMZWs9IiwiYW1yIjpbIm90cCJdLCJhcHBpZCI6Ijc2MGUwYzk5LWY4NGEtNDVlNi05ZDYwLTQ3NTBmYjUwOGFmZCIsImFwcGlkYWNyIjoiMSIsImVtYWlsIjoibml0aW4ubWFsaUBlcXVhbGV4cGVydHMuY29tIiwiaWRwIjoibWFpbCIsImlwYWRkciI6IjIxMi41Ni4xMDcuMTM2IiwibmFtZSI6Im5pdGluLm1hbGkgKEd1ZXN0KSIsIm9pZCI6ImFiMzhmZDdmLTllZjQtNDQzYy05NWQ1LTM4MzUwZGFhNzc2ZCIsInJoIjoiMS5BUXdBVUNRS2R5Y0NZa3lReDA0NFUzOFJBcGtNRG5aSy1PWkZuV0JIVVB0UWl2ME1BT2NNQUEuIiwicm9sZXMiOlsiRkNQLkNhc2V3b3JrLkFkbWluIl0sInNjcCI6ImN3LmJhY2tlbmQiLCJzaWQiOiIwMGFhYzZkOS0xOTU0LWY1MzEtNDYxZC02NWU4ODBiN2FlZDMiLCJzdWIiOiJxZVp4NXlFeGxtS1BYTXRBUGRNTTN6dWVjQ2Jqc1FZaXdNTE5HdDlIRGpjIiwidGlkIjoiNzcwYTI0NTAtMDIyNy00YzYyLTkwYzctNGUzODUzN2YxMTAyIiwidW5pcXVlX25hbWUiOiJtYWlsI25pdGluLm1hbGlAZXF1YWxleHBlcnRzLmNvbSIsInV0aSI6Ikh0U1ZjRlozYlVxRDZkOWhadndHQUEiLCJ2ZXIiOiIxLjAiLCJ4bXNfZnRkIjoia0h0cHFONmV4MEN0aDNjRTVhVkxMeU8tek0zQ0h0RlJyeUFBWlplMDZ4NEJabkpoYm1ObFl5MWtjMjF6In0.aGL0VkRadTtHjGuU7pbUHdUPsrrkr5-AB_kQx5yp8dr1CjXywDvKiFzuuihVEsV2jkQ6c2RGfOUpMj1rPpqCGAxxesbc0xpw9BqDD9o7ZdL9fdvHRSYiDdw_xrnTlOq9hWSOhvfLzhhIYbW_U3nMMP85daj3KehpTtxSKqtvhV5Fp1x-9r3JVi5-QuheTTCUOYzw9QbzoWi-n1y9XdoCJaC_zqAvKWjmSQR4ynn40KS3yAb8Titeb7rvfuhTtZusXkqBJVwlS4LXvMQ8U3eFDa0oz0O70YWh2wlJ_iUAm4t-8NXkAcYlVjqiZAp46ILmZx9vsWGAdYrJs4Xtc_dHZA"
+# echo "Creating 50 FRPS grant applications..."
+
 
 for i in $(seq 1 1); do
     CASE_REF="case-ref-$(date +%s)-$i"
     SBI="SBI$(printf "%03d" $i)"
-    FRN="FIRM$(printf "%04d" $i)"
+    FRN="FIRM$(date +%s)$(printf "%04d" $i)$((RANDOM % 1000))"
     CRN="CUST$(printf "%04d" $i)"
     DEFRA_ID="DEFRA$(printf "%04d" $i)"
     
@@ -64,10 +69,13 @@ for i in $(seq 1 1); do
             \"submittedAt\": \"2025-03-28T11:30:52.000Z\"
         },
         \"answers\": {
-            \"applicationValidationRunId\": 123,
+            \"rulesCalculations\": {
+                \"id\": $((2000 + i)),
+                \"message\": \"Application validated successfully\",
+                \"valid\": true,
+                \"date\": \"2025-11-21T10:10:43.673Z\"
+            },
             \"scheme\": \"SFI\",
-            \"year\": 2025,
-            \"hasCheckedLandIsUpToDate\": true,
             \"applicant\": {
                 \"business\": {
                     \"reference\": \"1101313269\",
@@ -77,7 +85,7 @@ for i in $(seq 1 1); do
                     \"address\": {
                         \"line1\": \"$HOUSE_NUM $STREET\",
                         \"line2\": \"$AREA\",
-                        \"line3\": \"Haute Vienne\",
+                        \"line3\": null,
                         \"line4\": null,
                         \"line5\": null,
                         \"street\": \"$TOWN\",
@@ -94,109 +102,158 @@ for i in $(seq 1 1); do
                     }
                 }
             },
-            \"totalAnnualPaymentPence\": 35150,
-            \"parcels\": [
-                {
-                    \"sheetId\": \"AB$((1234 + i))\",
-                    \"parcelId\": \"$((10001 + i))\",
-                    \"area\": {
-                        \"unit\": \"ha\",
-                        \"quantity\": 10.0
-                    },
-                    \"actions\": [
-                        {
-                            \"code\": \"CMOR1\",
-                            \"description\": \"Assess moorland and produce a written record\",
-                            \"durationYears\": 3,
-                            \"eligible\": {
-                                \"unit\": \"ha\",
-                                \"quantity\": 7.5
-                            },
-                            \"appliedFor\": {
-                                \"unit\": \"ha\",
-                                \"quantity\": 7.5
-                            },
-                            \"paymentRates\": {
-                                \"ratePerUnitPence\": 1060,
-                                \"agreementLevelAmountPence\": 27200
-                            },
-                            \"annualPaymentPence\": 35150
-                        }
-                    ]
-                },
-                {
-                    \"sheetId\": \"DX$((1234 + i))\",
-                    \"parcelId\": \"$((10002 + i))\",
-                    \"area\": {
-                        \"unit\": \"ha\",
-                        \"quantity\": 10.0
-                    },
-                    \"actions\": [
-                        {
-                            \"code\": \"UPL1\",
-                            \"description\": \"Assess moorland and produce a written record\",
-                            \"durationYears\": 3,
-                            \"eligible\": {
-                                \"unit\": \"ha\",
-                                \"quantity\": 7.5
-                            },
-                            \"appliedFor\": {
-                                \"unit\": \"ha\",
-                                \"quantity\": 7.5
-                            },
-                            \"paymentRates\": {
-                                \"ratePerUnitPence\": 1060,
-                                \"agreementLevelAmountPence\": 27200
-                            },
-                            \"annualPaymentPence\": 35150
-                        }
-                    ]
-                }
-            ],
-            \"actionApplications\": [
-                {
-                    \"parcelId\": \"$((10001 + i))\",
-                    \"sheetId\": \"AB$((1234 + i))\",
-                    \"code\": \"CMOR1\",
-                    \"appliedFor\": {
-                        \"unit\": \"ha\",
-                        \"quantity\": 7.5
-                    }
-                },
-                {
-                    \"parcelId\": \"$((10002 + i))\",
-                    \"sheetId\": \"DX$((1234 + i))\",
-                    \"code\": \"UPL1\",
-                    \"appliedFor\": {
-                        \"unit\": \"ha\",
-                        \"quantity\": 7.5
-                    }
-                }
-            ],
-            \"payment\": {
-                \"agreementStartDate\": \"2025-09-01\",
-                \"agreementEndDate\": \"2026-08-31\",
-                \"frequency\": \"Monthly\",
-                \"agreementTotalPence\": 35150,
-                \"annualTotalPence\": 35150,
-                \"parcelItems\": {
-                    \"description\": \"Moorland assessment agreement\",
-                    \"annualPaymentPence\": 35150
-                },
-                \"agreementLevelItems\": {
-                    \"type\": \"adminFee\",
-                    \"annualPaymentPence\": 0
-                },
-                \"payments\": [
+            \"totalAnnualPaymentPence\": 70284,
+            \"application\": {
+                \"parcel\": [
                     {
-                        \"paymentDate\": \"2025-10-01\",
-                        \"totalPaymentPence\": 2929,
-                        \"lineItems\": [
+                        \"sheetId\": \"SK$(printf "%04d" $((971 + i)))\",
+                        \"parcelId\": \"$((7555 + i))\",
+                        \"area\": {
+                            \"unit\": \"ha\",
+                            \"quantity\": 5.2182
+                        },
+                        \"actions\": [
                             {
-                                \"description\": \"Monthly moorland assessment payment\",
-                                \"paymentPence\": 2929
+                                \"code\": \"CMOR1\",
+                                \"version\": 1,
+                                \"durationYears\": 3,
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 4.7575
+                                }
+                            },
+                            {
+                                \"code\": \"UPL3\",
+                                \"version\": 1,
+                                \"durationYears\": 3,
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 4.7575
+                                }
                             }
                         ]
+                    },
+                    {
+                        \"sheetId\": \"SK$(printf "%04d" $((971 + i)))\",
+                        \"parcelId\": \"$((9194 + i))\",
+                        \"area\": {
+                            \"unit\": \"ha\",
+                            \"quantity\": 2.1703
+                        },
+                        \"actions\": [
+                            {
+                                \"code\": \"CMOR1\",
+                                \"version\": 1,
+                                \"durationYears\": 3,
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 2.1705
+                                }
+                            },
+                            {
+                                \"code\": \"UPL1\",
+                                \"version\": 1,
+                                \"durationYears\": 3,
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 2.1705
+                                }
+                            }
+                        ]
+                    }
+                ],
+                \"agreement\": []
+            },
+            \"payments\": {
+                \"parcel\": [
+                    {
+                        \"sheetId\": \"SK$(printf "%04d" $((971 + i)))\",
+                        \"parcelId\": \"$((7555 + i))\",
+                        \"area\": {
+                            \"unit\": \"ha\",
+                            \"quantity\": 5.2182
+                        },
+                        \"actions\": [
+                            {
+                                \"code\": \"CMOR1\",
+                                \"description\": \"Assess moorland and produce a written record\",
+                                \"durationYears\": 3,
+                                \"paymentRates\": 1060,
+                                \"annualPaymentPence\": 5042,
+                                \"eligible\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 4.7575
+                                },
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 4.7575
+                                }
+                            },
+                            {
+                                \"code\": \"UPL3\",
+                                \"description\": \"Limited livestock grazing on moorland\",
+                                \"durationYears\": 3,
+                                \"paymentRates\": 6600,
+                                \"annualPaymentPence\": 31399,
+                                \"eligible\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 4.7575
+                                },
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 4.7575
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        \"sheetId\": \"SK$(printf "%04d" $((971 + i)))\",
+                        \"parcelId\": \"$((9194 + i))\",
+                        \"area\": {
+                            \"unit\": \"ha\",
+                            \"quantity\": 2.1703
+                        },
+                        \"actions\": [
+                            {
+                                \"code\": \"CMOR1\",
+                                \"description\": \"Assess moorland and produce a written record\",
+                                \"durationYears\": 3,
+                                \"paymentRates\": 1060,
+                                \"annualPaymentPence\": 2300,
+                                \"eligible\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 2.1705
+                                },
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 2.1705
+                                }
+                            },
+                            {
+                                \"code\": \"UPL1\",
+                                \"description\": \"Moderate livestock grazing on moorland\",
+                                \"durationYears\": 3,
+                                \"paymentRates\": 2000,
+                                \"annualPaymentPence\": 4341,
+                                \"eligible\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 2.1705
+                                },
+                                \"appliedFor\": {
+                                    \"unit\": \"ha\",
+                                    \"quantity\": 2.1705
+                                }
+                            }
+                        ]
+                    }
+                ],
+                \"agreement\": [
+                    {
+                        \"code\": \"CMOR1\",
+                        \"description\": \"Assess moorland and produce a written record\",
+                        \"durationYears\": 3,
+                        \"paymentRates\": 27200,
+                        \"annualPaymentPence\": 27200
                     }
                 ]
             }
@@ -207,12 +264,19 @@ for i in $(seq 1 1); do
     echo "$PAYLOAD" | jq '.' 2>/dev/null || echo "$PAYLOAD"
     echo "=========================="
     
-    curl --location "$BASE_URL" \
-        --header 'accept: application/json' \
-        --header 'Content-Type: application/json' \
-        --header "x-api-key: $X_API_KEY" \
-        --header "Authorization: Bearer $BEARER_TOKEN" \
-        --data "$PAYLOAD"
+    # Validate JSON before sending
+    if echo "$PAYLOAD" | jq '.' >/dev/null 2>&1; then
+        echo "JSON is valid, sending request..."
+        curl --location "$BASE_URL" \
+            --header 'accept: application/json' \
+            --header 'Content-Type: application/json' \
+            --header "x-api-key: $X_API_KEY" \
+            --header "Authorization: Bearer $BEARER_TOKEN" \
+            --data "$PAYLOAD"
+    else
+        echo "ERROR: JSON is invalid!"
+        echo "$PAYLOAD" | jq '.' 2>&1
+    fi
     
     echo
     echo "---"
