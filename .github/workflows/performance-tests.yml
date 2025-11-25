@@ -32,13 +32,8 @@ on:
     - cron: '0 2 * * *'
 
 permissions:
-  id-token: write
   contents: read
   pull-requests: write
-
-env:
-  AWS_REGION: eu-west-2
-  AWS_ACCOUNT_ID: "094954420758"
 
 jobs:
   gas-api-performance-test:
@@ -64,22 +59,13 @@ jobs:
           echo "JMeter installed successfully"
           jmeter --version
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/cdp-github-actions-role
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Get environment secrets
+      - name: Set environment secrets
         run: |
-          # Get API credentials from AWS Secrets Manager or Parameter Store
-          API_KEY=$(aws ssm get-parameter --name "/cdp/${{ github.event.inputs.environment || 'perf-test' }}/fg-gas/api-key" --with-decryption --query 'Parameter.Value' --output text)
-          AUTH_TOKEN=$(aws ssm get-parameter --name "/cdp/${{ github.event.inputs.environment || 'perf-test' }}/fg-gas/auth-token" --with-decryption --query 'Parameter.Value' --output text)
-          
-          echo "X_API_KEY=$API_KEY" >> $GITHUB_ENV
-          echo "AUTHORIZATION_TOKEN=$AUTH_TOKEN" >> $GITHUB_ENV
-          echo "::add-mask::$API_KEY"
-          echo "::add-mask::$AUTH_TOKEN"
+          # Use GitHub secrets for API credentials
+          echo "X_API_KEY=${{ secrets.FG_GAS_API_KEY }}" >> $GITHUB_ENV
+          echo "AUTHORIZATION_TOKEN=${{ secrets.FG_GAS_AUTH_TOKEN }}" >> $GITHUB_ENV
+          echo "::add-mask::${{ secrets.FG_GAS_API_KEY }}"
+          echo "::add-mask::${{ secrets.FG_GAS_AUTH_TOKEN }}"
 
       - name: Create results directory
         run: mkdir -p test-results
@@ -91,12 +77,29 @@ jobs:
           echo "TEST_DURATION=${{ github.event.inputs.test_duration || '300' }}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${{ github.event.inputs.environment || 'perf-test' }}" >> $GITHUB_ENV
 
+      - name: Verify secrets are set
+        run: |
+          if [ -z "$X_API_KEY" ]; then
+            echo "❌ FG_GAS_API_KEY secret is not set"
+            echo "Please add FG_GAS_API_KEY to repository secrets"
+            exit 1
+          fi
+          if [ -z "$AUTHORIZATION_TOKEN" ]; then
+            echo "❌ FG_GAS_AUTH_TOKEN secret is not set" 
+            echo "Please add FG_GAS_AUTH_TOKEN to repository secrets"
+            exit 1
+          fi
+          echo "✅ All required secrets are configured"
+
       - name: Run GAS API Performance Tests
         run: |
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           
-          # Update the JMX file with current thread count and ramp time if needed
-          # For now, we'll override via command line parameters
+          echo "🚀 Running performance tests with:"
+          echo "  Environment: ${ENVIRONMENT}"
+          echo "  Threads: ${THREAD_COUNT}"
+          echo "  Ramp Time: ${RAMP_TIME}s"
+          echo "  Duration: ${TEST_DURATION}s"
           
           jmeter -n \
             -t scenarios/GAS_API_Test.jmx \
@@ -104,10 +107,6 @@ jobs:
             -e -o test-results/html_report_${TIMESTAMP} \
             -JX_API_KEY="${X_API_KEY}" \
             -JAUTHORIZATION_TOKEN="${AUTHORIZATION_TOKEN}" \
-            -Jthreads="${THREAD_COUNT}" \
-            -Jramptime="${RAMP_TIME}" \
-            -Jduration="${TEST_DURATION}" \
-            -Jenvironment="${ENVIRONMENT}" \
             || true  # Don't fail the workflow if some tests fail
 
       - name: Generate Test Summary

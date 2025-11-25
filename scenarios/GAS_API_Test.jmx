@@ -54,12 +54,12 @@
           <collectionProp name="Arguments.arguments">
             <elementProp name="AUTHORIZATION_TOKEN" elementType="Argument">
               <stringProp name="Argument.name">AUTHORIZATION_TOKEN</stringProp>
-              <stringProp name="Argument.value">24b8165f-dea5-417e-8216-d9350cdf0d5a</stringProp>
+              <stringProp name="Argument.value">${__P(AUTHORIZATION_TOKEN,PLACEHOLDER_AUTH_TOKEN)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="X_API_KEY" elementType="Argument">
               <stringProp name="Argument.name">X_API_KEY</stringProp>
-              <stringProp name="Argument.value">oKSnV0hKgSFhw46vklnMpD2cehp2WBHT</stringProp>
+              <stringProp name="Argument.value">${__P(X_API_KEY,PLACEHOLDER_API_KEY)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="CASE_REF" elementType="Argument">

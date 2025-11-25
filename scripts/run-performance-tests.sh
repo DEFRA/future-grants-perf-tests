@@ -37,9 +37,18 @@ mkdir -p test-results
 # Generate timestamp for unique file names
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-# Set default credentials (can be overridden by environment variables)
-X_API_KEY=${X_API_KEY:-"oKSnV0hKgSFhw46vklnMpD2cehp2WBHT"}
-AUTHORIZATION_TOKEN=${AUTHORIZATION_TOKEN:-"24b8165f-dea5-417e-8216-d9350cdf0d5a"}
+# Check for required credentials
+if [ -z "$X_API_KEY" ]; then
+    echo -e "${RED}❌ X_API_KEY environment variable is required${NC}"
+    echo -e "${YELLOW}Set it with: export X_API_KEY=\"your-api-key\"${NC}"
+    exit 1
+fi
+
+if [ -z "$AUTHORIZATION_TOKEN" ]; then
+    echo -e "${RED}❌ AUTHORIZATION_TOKEN environment variable is required${NC}"
+    echo -e "${YELLOW}Set it with: export AUTHORIZATION_TOKEN=\"your-auth-token\"${NC}"
+    exit 1
+fi
 
 # Base URL based on environment
 case $ENVIRONMENT in

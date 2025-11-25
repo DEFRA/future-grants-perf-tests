@@ -13,4 +13,18 @@ coverage
 jmeter.log
 report.csv
 reports/
+
+# Performance test results
+test-results/
+*.jtl
+*.log
+
+# Sensitive configuration files
+.env
+.env.local
+.env.*.local
+config/secrets.json
+
+# JMeter temporary files
+jmeter.save.saveservice.output_format=xml
 PERFORMANCE_TESTS.md
