@@ -30,10 +30,10 @@
       </ThreadGroup>
       <hashTree>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
-          <stringProp name="HTTPSampler.domain">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+          <stringProp name="HTTPSampler.domain">${__P(api.domain,fg-gas-backend.${__P(env,perf-test)}.cdp-int.defra.cloud)}</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/fg-gas-backend/</stringProp>
+          <stringProp name="HTTPSampler.path">${__P(api.path,/)}</stringProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -72,7 +72,7 @@
         </HeaderManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="1. Get Grants (Auth Only)" enabled="true">
-          <stringProp name="HTTPSampler.path">/fg-gas-backend/grants</stringProp>
+          <stringProp name="HTTPSampler.path">/grants</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>

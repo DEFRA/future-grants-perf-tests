@@ -50,7 +50,7 @@ if [ -z "$AUTHORIZATION_TOKEN" ]; then
     exit 1
 fi
 
-# Base URL based on environment
+# Base URL based on environment (local uses ephemeral URLs)
 case $ENVIRONMENT in
     "perf-test")
         BASE_URL="https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud"
@@ -81,11 +81,9 @@ jmeter -n \
     -e -o test-results/html_report_${TIMESTAMP} \
     -JX_API_KEY="${X_API_KEY}" \
     -JAUTHORIZATION_TOKEN="${AUTHORIZATION_TOKEN}" \
-    -Jthreads="${THREAD_COUNT}" \
-    -Jramptime="${RAMP_TIME}" \
-    -Jduration="${TEST_DURATION}" \
-    -Jenvironment="${ENVIRONMENT}" \
-    -Jbaseurl="${BASE_URL}"
+    -Japi.domain="ephemeral-protected.api.${ENVIRONMENT}.cdp-int.defra.cloud" \
+    -Japi.path="/fg-gas-backend" \
+    -Jenv="${ENVIRONMENT}"
 
 # Check if test completed successfully
 if [ $? -eq 0 ]; then
