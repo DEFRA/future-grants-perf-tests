@@ -39,8 +39,8 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
-          <stringProp name="HTTPSampler.domain">${__P(api.domain,ephemeral-protected.api.${__P(env,perf-test)}.cdp-int.defra.cloud)}</stringProp>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+          <stringProp name="HTTPSampler.domain">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/fg-gas-backend/</stringProp>
@@ -50,16 +50,16 @@
           <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
           <collectionProp name="Arguments.arguments">
             <elementProp name="AUTHORIZATION_TOKEN" elementType="Argument">
               <stringProp name="Argument.name">AUTHORIZATION_TOKEN</stringProp>
-              <stringProp name="Argument.value">${__P(AUTHORIZATION_TOKEN,PLACEHOLDER_AUTH_TOKEN)}</stringProp>
+              <stringProp name="Argument.value">24b8165f-dea5-417e-8216-d9350cdf0d5a</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="X_API_KEY" elementType="Argument">
               <stringProp name="Argument.name">X_API_KEY</stringProp>
-              <stringProp name="Argument.value">${__P(X_API_KEY,PLACEHOLDER_API_KEY)}</stringProp>
+              <stringProp name="Argument.value">HcbOoAIkgBp4JDTykYTpWvqkoSbz9ccz</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="CASE_REF" elementType="Argument">
@@ -70,7 +70,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">x-api-key</stringProp>
@@ -438,7 +438,7 @@
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
