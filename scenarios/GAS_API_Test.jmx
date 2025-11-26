@@ -40,7 +40,7 @@
       </ThreadGroup>
       <hashTree>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
-          <stringProp name="HTTPSampler.domain">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+          <stringProp name="HTTPSampler.domain">${__P(api.domain,ephemeral-protected.api.${__P(env,perf-test)}.cdp-int.defra.cloud)}</stringProp>
           <stringProp name="HTTPSampler.port">443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">/fg-gas-backend/</stringProp>

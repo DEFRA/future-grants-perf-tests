@@ -28,3 +28,4 @@ config/secrets.json
 # JMeter temporary files
 jmeter.save.saveservice.output_format=xml
 PERFORMANCE_TESTS.md
+README_CDP.md
