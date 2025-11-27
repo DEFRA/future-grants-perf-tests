@@ -29,8 +29,8 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GAS API Thread Group">
-        <intProp name="ThreadGroup.num_threads">10</intProp>
-        <intProp name="ThreadGroup.ramp_time">5</intProp>
+        <intProp name="ThreadGroup.num_threads">100</intProp>
+        <intProp name="ThreadGroup.ramp_time">30</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
@@ -123,8 +123,8 @@
           </ResponseAssertion>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time" enabled="true">
-            <stringProp name="ConstantTimer.delay">2000</stringProp>
-            <stringProp name="RandomTimer.range">1000</stringProp>
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">5000</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
@@ -160,8 +160,8 @@
           </ResponseAssertion>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time" enabled="true">
-            <stringProp name="ConstantTimer.delay">2000</stringProp>
-            <stringProp name="RandomTimer.range">1000</stringProp>
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">5000</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
@@ -197,8 +197,8 @@
           </ResponseAssertion>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time" enabled="true">
-            <stringProp name="ConstantTimer.delay">2000</stringProp>
-            <stringProp name="RandomTimer.range">1000</stringProp>
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">5000</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
@@ -234,8 +234,8 @@
           </ResponseAssertion>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time" enabled="true">
-            <stringProp name="ConstantTimer.delay">2000</stringProp>
-            <stringProp name="RandomTimer.range">1000</stringProp>
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">5000</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
@@ -333,8 +333,8 @@
           </RegexExtractor>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time" enabled="true">
-            <stringProp name="ConstantTimer.delay">2000</stringProp>
-            <stringProp name="RandomTimer.range">1000</stringProp>
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">5000</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
@@ -409,8 +409,8 @@
           </ResponseAssertion>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Think Time" enabled="true">
-            <stringProp name="ConstantTimer.delay">2000</stringProp>
-            <stringProp name="RandomTimer.range">1000</stringProp>
+            <stringProp name="ConstantTimer.delay">5000</stringProp>
+            <stringProp name="RandomTimer.range">5000</stringProp>
           </UniformRandomTimer>
           <hashTree/>
         </hashTree>
