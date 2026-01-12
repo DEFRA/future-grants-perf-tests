@@ -1,0 +1,22 @@
+# Environment variables (contains credentials)
+.env
+
+# Artifacts (contains session tokens)
+artifacts/*.json
+
+# Node modules
+node_modules/
+
+# WebdriverIO
+.tmp/
+allure-results/
+allure-report/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Screenshots
+errorShots/

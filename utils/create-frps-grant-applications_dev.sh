@@ -6,7 +6,7 @@ BASE_URL=https://ephemeral-protected.api.dev.cdp-int.defra.cloud/fg-gas-backend/
 # BASE_URL=https://ephemeral-protected.api.test.cdp-int.defra.cloud/fg-gas-backend/grants/frps-private-beta/applications
 
 # API authentication parameters
-X_API_KEY="TURdeM555elEbIwb6GepzG1vVjPngLuG"
+X_API_KEY="HjvixrK1IfNdTRFagu5Bom89ZBrvPJhK"
 BEARER_TOKEN="7d2caf6f-eed0-4b67-abe0-c03ff33111b9"
 echo "Creating 50 FRPS grant applications..."
 
