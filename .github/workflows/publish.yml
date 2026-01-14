@@ -23,6 +23,50 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Chrome for WebDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install auth dependencies
+        run: |
+          cd auth/run
+          npm ci
+
+      - name: Set up Entra ID credentials
+        run: |
+          cd auth/run
+          cat > .env << EOF
+          ENTRA_ID_USERNAME=${{ secrets.ENTRA_ID_USERNAME }}
+          ENTRA_ID_PASSWORD=${{ secrets.ENTRA_ID_PASSWORD }}
+          APP_URL=https://fg-cw-frontend.perf-test.cdp-int.defra.cloud/
+          EXPECTED_DOMAIN=fg-cw-frontend
+          COOKIE_NAME=session
+          OUTPUT_FILE=./artifacts/cw-fe-session.json
+          CASES_URL=https://fg-cw-frontend.perf-test.cdp-int.defra.cloud/cases
+          EOF
+
+      - name: Generate session cookies for JMeter
+        run: |
+          cd auth/run
+          chmod +x generate-multiple-cookies.sh
+          ./generate-multiple-cookies.sh 10
+        continue-on-error: false
+
+      - name: Verify cookies were generated
+        run: |
+          if [ ! -f test-data/session-cookies.csv ]; then
+            echo "Error: Session cookies file not generated"
+            exit 1
+          fi
+          echo "Session cookies generated successfully:"
+          wc -l test-data/session-cookies.csv
+
       - name: Build the test suite
         uses: DEFRA/cdp-build-action/build-test@main
         with:
