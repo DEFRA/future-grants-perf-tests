@@ -58,12 +58,6 @@ export const config = {
   capabilities: [
     {
       maxInstances: 1,
-      // Proxy configuration for CDP environment (same as E2E tests)
-      proxy: {
-        proxyType: 'manual',
-        httpProxy: 'localhost:3128',
-        sslProxy: 'localhost:3128'
-      },
       browserName: 'chrome',
       'goog:chromeOptions': {
         args: debug
