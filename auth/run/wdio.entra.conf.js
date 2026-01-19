@@ -86,6 +86,11 @@ export const config = {
               '--ignore-certificate-errors',
               '--disable-dev-shm-usage'
             ]
+      },
+      proxy: {
+        proxyType: 'manual',
+        httpProxy: 'localhost:3128',
+        sslProxy: 'localhost:3128'
       }
     }
   ],
