@@ -32,6 +32,13 @@ try {
 
 const debug = process.env.DEBUG === 'true'
 
+// Import child_process to start chromedriver manually
+import { spawn } from 'node:child_process'
+
+// Start chromedriver manually before tests
+let chromedriverProcess
+const chromedriverPath = './node_modules/chromedriver/lib/chromedriver/chromedriver'
+
 export const config = {
   runner: 'local',
 
@@ -41,6 +48,12 @@ export const config = {
   exclude: [],
 
   maxInstances: 1,
+
+  // Connect to manually started chromedriver
+  protocol: 'http',
+  hostname: 'localhost',
+  port: 9515,
+  path: '/',
 
   capabilities: [
     {
@@ -85,6 +98,33 @@ export const config = {
   mochaOpts: {
     ui: 'bdd',
     timeout: debug ? 3600000 : 120000 // 1 hour for debug, 2 minutes for normal
+  },
+
+  /**
+   * Hook: runs before entire test suite
+   * Start chromedriver manually to avoid download issues
+   */
+  onPrepare: async function (config, capabilities) {
+    console.log('Starting local chromedriver from node_modules...')
+    chromedriverProcess = spawn(chromedriverPath, ['--port=9515'], {
+      stdio: 'ignore',
+      detached: false
+    })
+
+    // Give chromedriver time to start
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log('✓ Chromedriver started on port 9515')
+  },
+
+  /**
+   * Hook: runs after entire test suite
+   * Stop chromedriver
+   */
+  onComplete: function () {
+    if (chromedriverProcess) {
+      console.log('Stopping chromedriver...')
+      chromedriverProcess.kill()
+    }
   },
 
   /**
