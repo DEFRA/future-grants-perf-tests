@@ -87,11 +87,14 @@ export const config = {
               '--disable-dev-shm-usage'
             ]
       },
-      proxy: {
-        proxyType: 'manual',
-        httpProxy: 'localhost:3128',
-        sslProxy: 'localhost:3128'
-      }
+      // Only use proxy in CDP environment (not locally)
+      ...(debug ? {} : {
+        proxy: {
+          proxyType: 'manual',
+          httpProxy: 'localhost:3128',
+          sslProxy: 'localhost:3128'
+        }
+      })
     }
   ],
 
