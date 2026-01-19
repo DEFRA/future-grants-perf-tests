@@ -32,10 +32,6 @@ try {
 
 const debug = process.env.DEBUG === 'true'
 
-// Detect Chromium (Alpine/Docker) vs Chrome (local development)
-const chromeBinary = process.env.CHROME_BIN || '/usr/bin/chromium-browser'
-const useChromium = fs.existsSync('/usr/bin/chromium-browser')
-
 export const config = {
   runner: 'local',
 
@@ -46,21 +42,11 @@ export const config = {
 
   maxInstances: 1,
 
-  // Skip driver download in environments without internet access (like CDP)
-  // Connect to manually started chromedriver instance
-  ...(useChromium ? {
-    protocol: 'http',
-    hostname: 'localhost',
-    port: 4444,
-    path: '/'
-  } : {}),
-
   capabilities: [
     {
       maxInstances: 1,
       browserName: 'chrome',
       'goog:chromeOptions': {
-        binary: useChromium ? chromeBinary : undefined,
         args: debug
           ? [
               '--disable-infobars',
