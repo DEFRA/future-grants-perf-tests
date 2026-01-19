@@ -12,7 +12,7 @@
         "wdio": "wdio run wdio.conf.js",
         "entra-login": "wdio run wdio.entra.conf.js",
         "entra-login:debug": "DEBUG=true wdio run wdio.entra.conf.js",
-        "entra-login:clear": "rm -f ../../test-data/session-cookies.csv && echo 'Cleared session cookies'",
+        "entra-login:clear": "rm -f ../../data/session-cookies.csv && echo 'Cleared session cookies'",
         "entra-login:multi": "./generate-multiple-cookies.sh 10"
     }
 }

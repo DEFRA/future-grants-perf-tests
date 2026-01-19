@@ -10,7 +10,7 @@ echo "Generating $COUNT session cookies"
 echo "========================================"
 
 # Clear existing CSV file
-CSV_FILE="../../test-data/session-cookies.csv"
+CSV_FILE="../../data/session-cookies.csv"
 rm -f "$CSV_FILE"
 echo "✓ Cleared existing cookies"
 

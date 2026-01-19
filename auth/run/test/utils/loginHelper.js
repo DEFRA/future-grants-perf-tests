@@ -84,7 +84,7 @@ export async function entraLoginAndDumpSessionCookie(
 
   // Also write CSV file for JMeter CSV Data Set Config
   // Navigate to project root: artifacts -> auth/run -> auth -> project root
-  const csvDir = path.join(path.dirname(outputFile), '..', '..', '..', 'test-data')
+  const csvDir = path.join(path.dirname(outputFile), '..', '..', '..', 'data')
   await fs.mkdir(csvDir, { recursive: true })
   const csvFile = path.join(csvDir, 'session-cookies.csv')
 

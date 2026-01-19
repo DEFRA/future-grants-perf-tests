@@ -6,10 +6,10 @@ BASE_URL="https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases"
 # Get the directory where the script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-OUTPUT_FILE="$PROJECT_ROOT/test-data/perf_test_case_refs.csv"
+OUTPUT_FILE="$PROJECT_ROOT/data/perf_test_case_refs.csv"
 
-# Ensure test-data directory exists
-mkdir -p "$PROJECT_ROOT/test-data"
+# Ensure data directory exists
+mkdir -p "$PROJECT_ROOT/data"
 
 echo "Fetching all cases from $BASE_URL..."
 

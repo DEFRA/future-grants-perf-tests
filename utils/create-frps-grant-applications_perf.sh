@@ -292,12 +292,12 @@ RESPONSE=$(curl -s --location "${CASEWORK_BASE_URL}/cases" \
 # Store response in JSON file with timestamp
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 JSON_FILE="cases_response_${TIMESTAMP}.json"
-CSV_FILE="../test-data/perf_test_case_refs_frps.csv"
+CSV_FILE="../data/perf_test_case_refs_frps.csv"
 
 echo "$RESPONSE" > "$JSON_FILE"
 
-# Create test-data directory if it doesn't exist
-mkdir -p "../test-data"
+# Create data directory if it doesn't exist
+mkdir -p "../data"
 
 # Parse JSON and create CSV file with caseRef,_id format
 echo "caseRef,_id" > "$CSV_FILE"

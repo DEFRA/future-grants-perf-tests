@@ -36,14 +36,14 @@ The workflow performs the following steps:
 4. **Install auth dependencies** - Installs npm packages for authentication
 5. **Set up Entra ID credentials** - Creates `.env` file with secrets
 6. **Generate session cookies** - Runs `generate-multiple-cookies.sh 10` to create 10 cookies
-7. **Verify cookies** - Checks that `test-data/session-cookies.csv` was created
+7. **Verify cookies** - Checks that `data/session-cookies.csv` was created
 8. **Build the test suite** - Runs JMeter tests with the generated cookies
 
 ## Cookie Generation
 
 The workflow generates **10 session cookies** by default. These cookies are stored in:
 ```
-test-data/session-cookies.csv
+data/session-cookies.csv
 ```
 
 Each cookie is obtained by:

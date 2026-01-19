@@ -19,7 +19,66 @@ SCENARIOFILE=${JM_SCENARIOS}/${TEST_SCENARIO}.jmx
 REPORTFILE=${NOW}-perftest-${TEST_SCENARIO}-report.csv
 LOGFILE=${JM_LOGS}/perftest-${TEST_SCENARIO}.log
 
+# ============================================
+# Generate Session Cookies for JMeter
+# ============================================
+echo ""
+echo "========================================"
+echo "Generating session cookies for JMeter"
+echo "========================================"
+
+# Check if Entra ID credentials are provided
+if [ -z "${ENTRA_ID_USERNAME}" ] || [ -z "${ENTRA_ID_PASSWORD}" ]; then
+  echo "ERROR: ENTRA_ID_USERNAME and ENTRA_ID_PASSWORD environment variables are required"
+  echo "These should be set from CDP secrets"
+  exit 1
+fi
+
+# Navigate to auth directory
+cd ${JM_HOME}/auth/run
+
+# Create .env file with Entra ID credentials
+cat > .env << EOF
+ENTRA_ID_USERNAME=${ENTRA_ID_USERNAME}
+ENTRA_ID_PASSWORD=${ENTRA_ID_PASSWORD}
+APP_URL=https://fg-cw-frontend.perf-test.cdp-int.defra.cloud/
+EXPECTED_DOMAIN=fg-cw-frontend
+COOKIE_NAME=session
+OUTPUT_FILE=./artifacts/cw-fe-session.json
+CASES_URL=https://fg-cw-frontend.perf-test.cdp-int.defra.cloud/cases
+EOF
+
+echo "✓ Entra ID credentials configured"
+
+# Generate session cookies (10 cookies by default)
+COOKIE_COUNT=${COOKIE_COUNT:-10}
+echo "Generating ${COOKIE_COUNT} session cookies..."
+
+chmod +x generate-multiple-cookies.sh
+./generate-multiple-cookies.sh ${COOKIE_COUNT}
+
+if [ $? -ne 0 ]; then
+  echo "ERROR: Failed to generate session cookies"
+  exit 1
+fi
+
+# Return to perftest directory
+cd ${JM_HOME}
+
+# Verify cookies were generated
+if [ ! -f "${JM_DATA}/session-cookies.csv" ]; then
+  echo "ERROR: Session cookies file not found at ${JM_DATA}/session-cookies.csv"
+  exit 1
+fi
+
+COOKIE_LINE_COUNT=$(wc -l < ${JM_DATA}/session-cookies.csv)
+echo "✓ Session cookies generated successfully: ${COOKIE_LINE_COUNT} lines in CSV"
+echo "========================================"
+echo ""
+
+# ============================================
 # Run the test suite
+# ============================================
 jmeter -n -t ${SCENARIOFILE} -e -l "${REPORTFILE}" -o ${JM_REPORTS} -j ${LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}"
 
 # Publish the results into S3 so they can be displayed in the CDP Portal

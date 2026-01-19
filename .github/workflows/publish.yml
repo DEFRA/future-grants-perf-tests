@@ -60,12 +60,12 @@ jobs:
 
       - name: Verify cookies were generated
         run: |
-          if [ ! -f test-data/session-cookies.csv ]; then
+          if [ ! -f data/session-cookies.csv ]; then
             echo "Error: Session cookies file not generated"
             exit 1
           fi
           echo "Session cookies generated successfully:"
-          wc -l test-data/session-cookies.csv
+          wc -l data/session-cookies.csv
 
       - name: Build the test suite
         uses: DEFRA/cdp-build-action/build-test@main

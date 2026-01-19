@@ -6,11 +6,11 @@
 # Get the directory where the script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-INPUT_FILE="$PROJECT_ROOT/test-data/all-cases.json"
-OUTPUT_FILE="$PROJECT_ROOT/test-data/perf_test_case_refs_frps.csv"
+INPUT_FILE="$PROJECT_ROOT/data/all-cases.json"
+OUTPUT_FILE="$PROJECT_ROOT/data/perf_test_case_refs_frps.csv"
 
-# Ensure test-data directory exists
-mkdir -p "$PROJECT_ROOT/test-data"
+# Ensure data directory exists
+mkdir -p "$PROJECT_ROOT/data"
 
 # Check if input file exists
 if [ ! -f "$INPUT_FILE" ]; then
