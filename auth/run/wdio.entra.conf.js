@@ -46,6 +46,15 @@ export const config = {
 
   maxInstances: 1,
 
+  // Skip driver download in environments without internet access (like CDP)
+  // Connect to manually started chromedriver instance
+  ...(useChromium ? {
+    protocol: 'http',
+    hostname: 'localhost',
+    port: 4444,
+    path: '/'
+  } : {}),
+
   capabilities: [
     {
       maxInstances: 1,

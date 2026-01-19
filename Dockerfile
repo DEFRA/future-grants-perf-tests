@@ -33,4 +33,9 @@ ENV CHROME_BIN=/usr/bin/chromium-browser
 ENV CHROME_PATH=/usr/lib/chromium/
 ENV CHROMIUM_FLAGS="--disable-software-rasterizer --disable-dev-shm-usage"
 
+# Prevent WebDriver from downloading drivers (use pre-installed ones)
+ENV WDIO_SKIP_DRIVER_DOWNLOAD=true
+ENV CHROMEDRIVER_SKIP_DOWNLOAD=true
+ENV DETECT_CHROMEDRIVER_VERSION=false
+
 ENTRYPOINT [ "./entrypoint.sh" ]

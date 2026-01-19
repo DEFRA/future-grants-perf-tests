@@ -54,10 +54,26 @@ echo "✓ Entra ID credentials configured"
 COOKIE_COUNT=${COOKIE_COUNT:-10}
 echo "Generating ${COOKIE_COUNT} session cookies..."
 
+# Start chromedriver in background (if running in Docker/Alpine)
+if [ -f "/usr/bin/chromedriver" ]; then
+  echo "Starting chromedriver in background..."
+  /usr/bin/chromedriver --port=4444 --allowed-ips="" > /tmp/chromedriver.log 2>&1 &
+  CHROMEDRIVER_PID=$!
+  echo "Chromedriver started with PID: $CHROMEDRIVER_PID"
+  sleep 2  # Give chromedriver time to start
+fi
+
 chmod +x generate-multiple-cookies.sh
 ./generate-multiple-cookies.sh ${COOKIE_COUNT}
+COOKIE_RESULT=$?
 
-if [ $? -ne 0 ]; then
+# Stop chromedriver if we started it
+if [ -n "$CHROMEDRIVER_PID" ]; then
+  echo "Stopping chromedriver (PID: $CHROMEDRIVER_PID)..."
+  kill $CHROMEDRIVER_PID 2>/dev/null || true
+fi
+
+if [ $COOKIE_RESULT -ne 0 ]; then
   echo "ERROR: Failed to generate session cookies"
   exit 1
 fi
