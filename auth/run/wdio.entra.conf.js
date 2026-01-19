@@ -34,7 +34,6 @@ const debug = process.env.DEBUG === 'true'
 
 // Import child_process to start chromedriver manually
 import { spawn } from 'node:child_process'
-import fs from 'fs'
 
 // Start chromedriver manually before tests
 let chromedriverProcess
