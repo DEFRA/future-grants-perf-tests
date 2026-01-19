@@ -58,6 +58,12 @@ export const config = {
   capabilities: [
     {
       maxInstances: 1,
+      // Proxy configuration for CDP environment (same as E2E tests)
+      proxy: {
+        proxyType: 'manual',
+        httpProxy: 'localhost:3128',
+        sslProxy: 'localhost:3128'
+      },
       browserName: 'chrome',
       'goog:chromeOptions': {
         args: debug
@@ -66,10 +72,9 @@ export const config = {
               '--window-size=1920,1080'
             ]
           : [
-              '--headless',
               '--no-sandbox',
-              '--disable-dev-shm-usage',
               '--disable-infobars',
+              '--headless',
               '--disable-gpu',
               '--window-size=1920,1080',
               '--enable-features=NetworkService,NetworkServiceInProcess',
@@ -78,7 +83,8 @@ export const config = {
               '--dns-prefetch-disable',
               '--disable-background-networking',
               '--disable-remote-fonts',
-              '--ignore-certificate-errors'
+              '--ignore-certificate-errors',
+              '--disable-dev-shm-usage'
             ]
       }
     }
