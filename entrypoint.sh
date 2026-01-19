@@ -51,7 +51,7 @@ EOF
 echo "✓ Entra ID credentials configured"
 
 # Generate session cookies (10 cookies by default)
-COOKIE_COUNT=${COOKIE_COUNT:-10}
+COOKIE_COUNT=${COOKIE_COUNT:-2}
 echo "Generating ${COOKIE_COUNT} session cookies..."
 
 chmod +x generate-multiple-cookies.sh
