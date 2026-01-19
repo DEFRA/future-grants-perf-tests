@@ -37,7 +37,8 @@ import { spawn } from 'node:child_process'
 
 // Start chromedriver manually before tests
 let chromedriverProcess
-const chromedriverPath = './node_modules/chromedriver/lib/chromedriver/chromedriver'
+// Use system chromedriver from Alpine package (chromium-chromedriver)
+const chromedriverPath = '/usr/bin/chromedriver'
 
 export const config = {
   runner: 'local',
