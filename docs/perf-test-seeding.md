@@ -15,7 +15,7 @@ This document describes the performance test data seeding feature for the fg-cw-
 ```
 GAS Backend                          CW Backend
 -----------                          ----------
-1. Create 100 applications    ->    5. Receive CreateNewCaseCommand
+1. Create 15,000 applications ->    5. Receive CreateNewCaseCommand
 2. Generate outbox messages   ->    6. Create cases in database
 3. Outbox subscriber          ->    7. Cases available in UI
 4. Publish to SNS/SQS
@@ -34,7 +34,7 @@ GAS Backend                          CW Backend
 
 ### GAS Backend
 
-- `/src/grants/perf-test-seed.js` - Seeds 100 test applications
+- `/src/grants/perf-test-seed.js` - Seeds 15,000 test applications
 - `/src/grants/index.js` - Calls `seedPerfTestData()` after migrations
 
 ### CW Backend
@@ -127,20 +127,15 @@ Deploy `hotfix/perf-test-seed` branch to perf-test environment.
 Running migrations
 Finished running migrations
 🧹 Starting performance test data seeding...
-📝 Creating 100 test applications...
-   ✓ Created 10/100 applications
-   ✓ Created 20/100 applications
-   ✓ Created 30/100 applications
-   ✓ Created 40/100 applications
-   ✓ Created 50/100 applications
-   ✓ Created 60/100 applications
-   ✓ Created 70/100 applications
-   ✓ Created 80/100 applications
-   ✓ Created 90/100 applications
-   ✓ Created 100/100 applications
+📝 Creating 15000 test applications...
+   ✓ Created 100/15000 applications
+   ✓ Created 200/15000 applications
+   ...
+   ✓ Created 14900/15000 applications
+   ✓ Created 15000/15000 applications
 ✅ Performance test data seeding complete!
-   Total applications: 100
-   Client refs: perf-test-000 to perf-test-099
+   Total applications: 15000
+   Client refs: perf-test-00000 to perf-test-14999
 ```
 
 #### 4. Verify Case Creation in CW
@@ -156,7 +151,7 @@ Case created successfully with caseRef: FG-FRPS-...
 
 ```javascript
 db.cases.countDocuments({});
-// Should return: 100 (or close to it if still processing)
+// Should return: 15000 (or close to it if still processing)
 
 db.cases.find({}).limit(3).pretty();
 // Shows sample cases
@@ -166,12 +161,12 @@ db.cases.find({}).limit(3).pretty();
 
 ### GAS Backend
 
-**100 Applications**:
+**15,000 Applications**:
 
 - Scheme: `frps-private-beta`
-- Client refs: `perf-test-000` to `perf-test-099`
-- SBI range: `107000000` to `107000099`
-- FRN/CRN range: `1100000000` to `1100000099`
+- Client refs: `perf-test-00000` to `perf-test-14999`
+- SBI range: `107000000` to `107014999`
+- FRN/CRN range: `1100000000` to `1100014999`
 
 ### CW Backend
 
@@ -180,7 +175,7 @@ db.cases.find({}).limit(3).pretty();
 - `perf-test-user-1`: perftest.caseworker@example.com (role: caseworker)
 - `perf-test-user-2`: perftest.admin@example.com (role: admin)
 
-**100 Cases** (created via SQS):
+**15,000 Cases** (created via SQS):
 
 - Case refs: `FG-FRPS-*` (auto-generated)
 - Workflow: `frps-private-beta`
@@ -376,14 +371,14 @@ print(
 ```javascript
 // GAS Backend
 db.applications.countDocuments({ clientRef: /^perf-test-/ });
-// Should return: 100
+// Should return: 15000
 
 // CW Backend
 db.users.countDocuments({ _id: /^perf-test-user-/ });
 // Should return: 2
 
 db.cases.countDocuments({});
-// Should return: 100
+// Should return: 15000
 ```
 
 ## Important Notes
