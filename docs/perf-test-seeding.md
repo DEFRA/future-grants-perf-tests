@@ -267,6 +267,28 @@ curl --location 'https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud/f
 
 **Note**: Performance tests running inside CDP can access the backend directly without the ephemeral gateway.
 
+### JMeter Configuration
+
+The JMeter script `scenarios/cw-journey-complete.jmx` is pre-configured to work in both environments.
+
+**For CDP Execution** (default configuration):
+- `BASE_URL_2`: `fg-cw-backend.perf-test.cdp-int.defra.cloud`
+- `API_KEY`: (empty)
+- No changes needed
+
+**For Local Execution**:
+1. Open the JMeter script in JMeter GUI
+2. Update User Defined Variables:
+   - `BASE_URL_2`: `ephemeral-protected.api.perf-test.cdp-int.defra.cloud/fg-cw-backend`
+   - `API_KEY`: Your Developer API key from CDP portal
+3. Run the test
+
+**How it works**:
+- The script reads `caseRef` from CSV file `data/perf_test_case_refs_frps.csv`
+- Makes GET request to `/cases/ref/${caseRef}` with optional `x-api-key` header
+- Extracts `caseId` from JSON response and stores as `_id` variable
+- All subsequent requests use `${_id}` to access the case
+
 ## Troubleshooting
 
 ### Issue: "Workflow with code 'frps-private-beta' not found"
