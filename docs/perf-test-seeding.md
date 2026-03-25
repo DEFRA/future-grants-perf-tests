@@ -6,7 +6,29 @@ This document describes the performance test data seeding feature for the fg-cw-
 
 **Branch**: `hotfix/perf-test-seed` (DO NOT MERGE TO MAIN)
 
-**Environment Variable**: `PERF_TEST_SEED=true` (set in perf-test environment only)
+**Environment Variables**:
+- `PERF_TEST_SEED=true` - Enables performance test seeding (set in perf-test environment only)
+- `PERF_TEST_COUNT=<number>` - Number of applications to create (default: 1000)
+  - Examples: `PERF_TEST_COUNT=100` for testing, `PERF_TEST_COUNT=15000` for full load
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Required | Default | Description | Example |
+|----------|----------|---------|-------------|---------|
+| `PERF_TEST_SEED` | Yes | - | Enables perf test seeding. Only set in perf-test environment. | `true` |
+| `PERF_TEST_COUNT` | No | `1000` | Number of test applications to create in GAS (and cases in CW). | `100`, `1000`, `15000` |
+
+**Setting in CDP**:
+1. Go to your service configuration in CDP
+2. Add/update environment variables
+3. Deploy the service
+
+**Examples**:
+- Small test: `PERF_TEST_COUNT=100` → 100 applications/cases
+- Default: `PERF_TEST_COUNT=1000` → 1,000 applications/cases
+- Full load: `PERF_TEST_COUNT=15000` → 15,000 applications/cases
 
 ## Architecture
 
@@ -15,9 +37,10 @@ This document describes the performance test data seeding feature for the fg-cw-
 ```
 GAS Backend                          CW Backend
 -----------                          ----------
-1. Create 15,000 applications ->    5. Receive CreateNewCaseCommand
-2. Generate outbox messages   ->    6. Create cases in database
-3. Outbox subscriber          ->    7. Cases available in UI
+1. Create N applications      ->    5. Receive CreateNewCaseCommand
+   (N = PERF_TEST_COUNT)             6. Create cases in database
+2. Generate outbox messages   ->    7. Cases available in UI
+3. Outbox subscriber          ->
 4. Publish to SNS/SQS
 ```
 
@@ -34,14 +57,14 @@ GAS Backend                          CW Backend
 
 ### GAS Backend
 
-- `/src/grants/perf-test-seed.js` - Seeds 15,000 test applications
-- `/src/grants/index.js` - Calls `seedPerfTestData()` after migrations
+- `/src/grants/perf-test-seed.js` - Seeds test applications (count configurable via PERF_TEST_COUNT)
+- `/src/grants/index.js` - Calls `seedPerfTestData()` in background after server starts
 
 ### CW Backend
 
-- `/src/cases/perf-test-seed.js` - Seeds test users, clears test data
-- `/src/cases/index.js` - Calls `seedPerfTestData()` after migrations
-- `/src/cases/routes/find-case-id-by-ref.route.js` - Test endpoint to get case ID by caseRef
+- `/src/cases/perf-test-seed.js` - Seeds test users, clears test data (cases/outbox/inbox)
+- `/src/cases/index.js` - Calls `seedPerfTestData()` in background after server starts
+- `/src/cases/routes/find-case-id-by-ref.route.js` - Test endpoint to get case ID by caseRef (no auth)
 
 ## Deployment Process
 
@@ -53,27 +76,9 @@ GAS Backend                          CW Backend
 
 ### Step-by-Step Deployment
 
-#### 1. Clean Up Existing Data (First Time or Re-seed)
+**Note**: Database clearing is **automatic**. The seed scripts will automatically clear and re-seed if the count doesn't match the target.
 
-**CW Database Cleanup** (mongosh connected to fg-cw-backend):
-
-```javascript
-db.cases.deleteMany({});
-db.users.deleteMany({ _id: /^perf-test-user-/ });
-db.outbox.deleteMany({});
-db.inbox.deleteMany({});
-```
-
-**GAS Database Cleanup** (mongosh connected to fg-gas-backend):
-
-```javascript
-db.applications.deleteMany({});
-db.application_series.deleteMany({});
-db.outbox.deleteMany({});
-db.inbox.deleteMany({});
-```
-
-#### 2. Deploy CW Backend First
+#### 1. Deploy CW Backend First
 
 **Why first?** CW must be ready to receive SQS messages before GAS sends them.
 
@@ -90,13 +95,15 @@ Migrated: "20260216100000-add-required-roles-to-frps-private-beta.js"
 Migrated: "20260217153400-frps-update-agreements-tab-dates-conditional.js"
 Migrated: "20260324120000-add-themes-to-frps-task-status-options.js"
 Finished running migrations
-🧹 Starting performance test data seeding...
-   ✓ Created 2 test users
-✅ Performance test data seeding complete!
+server started
 Starting inbox subscriber
 Started polling SQS queue: https://sqs.eu-west-2.amazonaws.com/.../cw__sqs__create_new_case_fifo.fifo
-server started
+🗑️  Clearing test data collections...
+   ✓ Cleared cases, outbox, inbox
+⏭️  Perf test data already seeded with 2 test users, skipping
 ```
+
+**Note**: Seeding runs in **background** after server starts to avoid ECS health check timeouts.
 
 **Verify CW is Ready**:
 
@@ -118,7 +125,7 @@ db.users.countDocuments({ _id: /^perf-test-user-/ });
 // Should return: 2
 ```
 
-#### 3. Deploy GAS Backend Second
+#### 2. Deploy GAS Backend Second
 
 Deploy `hotfix/perf-test-seed` branch to perf-test environment.
 
@@ -127,19 +134,26 @@ Deploy `hotfix/perf-test-seed` branch to perf-test environment.
 ```
 Running migrations
 Finished running migrations
+server started
+Starting outbox subscriber
+Target application count: 1000
 🧹 Starting performance test data seeding...
-📝 Creating 15000 test applications...
-   ✓ Created 100/15000 applications
-   ✓ Created 200/15000 applications
+📝 Creating 1000 test applications...
+   ✓ Created 100/1000 applications
+   ✓ Created 200/1000 applications
    ...
-   ✓ Created 14900/15000 applications
-   ✓ Created 15000/15000 applications
+   ✓ Created 1000/1000 applications
 ✅ Performance test data seeding complete!
-   Total applications: 15000
-   Client refs: perf-test-00000 to perf-test-14999
+   Total applications: 1000
+   Client refs: perf-test-00000 to perf-test-00999
 ```
 
-#### 4. Verify Case Creation in CW
+**Note**:
+- Seeding runs in **background** after server starts to avoid ECS health check timeouts
+- Count shown depends on `PERF_TEST_COUNT` environment variable (default: 1000)
+- For 15,000 applications, set `PERF_TEST_COUNT=15000`
+
+#### 3. Verify Case Creation in CW
 
 **Check CW logs** for inbox processing (may take 30-60 seconds):
 
@@ -152,7 +166,8 @@ Case created successfully with caseRef: FG-FRPS-...
 
 ```javascript
 db.cases.countDocuments({});
-// Should return: 15000 (or close to it if still processing)
+// Should return: PERF_TEST_COUNT (or close to it if still processing)
+// Example: 1000 (default), 15000 (if PERF_TEST_COUNT=15000)
 
 db.cases.find({}).limit(3).pretty();
 // Shows sample cases
@@ -162,12 +177,14 @@ db.cases.find({}).limit(3).pretty();
 
 ### GAS Backend
 
-**15,000 Applications**:
+**N Applications** (N = `PERF_TEST_COUNT`, default 1000):
 
 - Scheme: `frps-private-beta`
-- Client refs: `perf-test-00000` to `perf-test-14999`
-- SBI range: `107000000` to `107014999`
-- FRN/CRN range: `1100000000` to `1100014999`
+- Client refs: `perf-test-00000` to `perf-test-{N-1}` (padded to 5 digits)
+  - Example with 1000: `perf-test-00000` to `perf-test-00999`
+  - Example with 15000: `perf-test-00000` to `perf-test-14999`
+- SBI range: `107000000` to `107000000 + N - 1`
+- FRN/CRN range: `1100000000` to `1100000000 + N - 1`
 
 ### CW Backend
 
@@ -176,11 +193,12 @@ db.cases.find({}).limit(3).pretty();
 - `perf-test-user-1`: perftest.caseworker@example.com (role: caseworker)
 - `perf-test-user-2`: perftest.admin@example.com (role: admin)
 
-**15,000 Cases** (created via SQS):
+**N Cases** (created via SQS from GAS applications):
 
-- Case refs: `FG-FRPS-*` (auto-generated)
+- Case refs: `FG-FRPS-*` (auto-generated by CW)
 - Workflow: `frps-private-beta`
 - Status: `APPLICATION_RECEIVED`
+- Count matches `PERF_TEST_COUNT`
 
 ## Using Test Data in Performance Tests
 
@@ -214,7 +232,10 @@ curl https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/perf-test-000
 **JavaScript/Node.js example**:
 ```javascript
 // Loop through all test cases
-for (let i = 0; i < 15000; i++) {
+// Count depends on PERF_TEST_COUNT (default: 1000, can be set to 15000, etc.)
+const testCount = 1000; // Adjust to match your PERF_TEST_COUNT
+
+for (let i = 0; i < testCount; i++) {
   const caseRef = `perf-test-${String(i).padStart(5, '0')}`;
 
   // Get case ID
@@ -281,25 +302,41 @@ db.changelog.deleteMany({ fileName: /frps/ });
 
 **Cause**: SQS messages were consumed or expired before CW was ready.
 
-**Fix**: Clear GAS database and redeploy GAS to generate fresh applications:
+**Fix**: Redeploy GAS backend - it will automatically clear and re-seed applications, generating fresh SQS messages.
 
-```javascript
-// In GAS database
-db.applications.deleteMany({});
-db.application_series.deleteMany({});
-db.outbox.deleteMany({});
-db.inbox.deleteMany({});
-```
-
-Then redeploy GAS backend.
+Alternatively, manually trigger re-seed by changing `PERF_TEST_COUNT` temporarily and redeploying.
 
 ### Issue: "Perf test data already seeded, skipping"
 
-**Cause**: Idempotent check detected existing test data (prevents race conditions with multiple pods).
+**Cause**: Idempotent check detected existing test data with matching count (prevents race conditions with multiple pods).
 
 **Behavior**: This is **normal** on subsequent pod restarts. Data only seeds once per deployment.
 
-**To re-seed**: Clear the database collections (see Step 1) and redeploy.
+**To re-seed with different count**:
+1. Change `PERF_TEST_COUNT` environment variable in CDP
+2. Redeploy - will automatically detect count mismatch and re-seed
+
+**To re-seed with same count**: Deployment will skip seeding. Either:
+- Manually clear collections (see troubleshooting), or
+- Temporarily change `PERF_TEST_COUNT`, deploy, then change back
+
+### Issue: "ECS deployment circuit breaker: tasks failed to start"
+
+**Cause**: This was an issue in earlier versions where seeding ran during startup and blocked the server from becoming healthy.
+
+**Status**: **FIXED** - Seeding now runs in background after server starts.
+
+**What was happening**:
+- Seeding 15,000 applications took 10+ minutes
+- ECS health checks timed out waiting for server to be ready
+- Pods were killed at ~4,150 applications
+
+**Current behavior**:
+- Server starts immediately (pods become healthy)
+- Seeding runs in background
+- All applications are created successfully
+
+**If you still see this**: You may be on an old version. Ensure you're on the latest hotfix commit.
 
 ### Issue: Multiple Pods Running Migrations Simultaneously
 
@@ -329,35 +366,53 @@ Could not migrate up 20251114123000-add-frps-private-beta.js: E11000 duplicate k
 - Workflow is incomplete (missing themes)
 - Follow "Invalid WorkflowTask" fix above
 
-## Race Condition Prevention
+## Race Condition Prevention & Auto-Clearing
 
-Both seed scripts include idempotent checks to prevent duplicate seeding:
+Both seed scripts include smart idempotent checks that compare existing count to target count:
 
 **GAS**:
 
 ```javascript
+const targetCount = parseInt(process.env.PERF_TEST_COUNT || "1000", 10);
 const existing = await db
   .collection("applications")
   .countDocuments({ clientRef: /^perf-test-/ });
-if (existing > 0) {
-  logger.info("⏭️  Perf test data already seeded, skipping");
+
+if (existing === targetCount) {
+  logger.info(`⏭️  Perf test data already seeded with ${targetCount} applications, skipping`);
   return;
 }
+
+// If count doesn't match (e.g., 100 exists but target is 1000), automatically clear and re-seed
+logger.info(`🔄 Found ${existing} applications, target is ${targetCount}. Will clear and re-seed.`);
+await clearCollections(db);
+await createApplications(targetCount);
 ```
 
 **CW**:
 
 ```javascript
+const targetCount = 2; // Number of test users
 const existing = await db
   .collection("users")
   .countDocuments({ _id: /^perf-test-user-/ });
-if (existing > 0) {
-  logger.info("⏭️  Perf test data already seeded, skipping");
+
+if (existing === targetCount) {
+  logger.info(`⏭️  Perf test data already seeded with ${targetCount} test users, skipping`);
   return;
 }
+
+// Always clears cases/outbox/inbox on every deployment (regardless of user count)
+await db.collection("cases").deleteMany({});
+await db.collection("outbox").deleteMany({});
+await db.collection("inbox").deleteMany({});
 ```
 
-This ensures that even with 3 pods starting simultaneously, seeding only happens once.
+This ensures:
+- ✅ Only skips if count **exactly matches** target (prevents race conditions)
+- ✅ Automatically re-seeds if count changes
+- ✅ Safe with 3 pods starting simultaneously
+- ✅ CW always clears cases to prepare for new SQS messages
 
 ## Workflow Migrations
 
@@ -436,14 +491,14 @@ print(
 ```javascript
 // GAS Backend
 db.applications.countDocuments({ clientRef: /^perf-test-/ });
-// Should return: 15000
+// Should return: PERF_TEST_COUNT (default: 1000)
 
 // CW Backend
 db.users.countDocuments({ _id: /^perf-test-user-/ });
 // Should return: 2
 
 db.cases.countDocuments({});
-// Should return: 15000
+// Should return: PERF_TEST_COUNT (matches application count)
 ```
 
 ## Important Notes
@@ -453,6 +508,8 @@ db.cases.countDocuments({});
 3. **Workflows are Configuration**: Never delete workflows during seeding - they're configuration data like grants
 4. **Deploy Order Matters**: Always deploy CW before GAS to ensure inbox subscriber is ready for messages
 5. **Idempotent by Design**: Safe to restart pods - seeding only happens once per deployment cycle
+6. **Background Seeding**: Seeding runs in background after server starts, so pods become healthy immediately and ECS health checks don't timeout (prevents circuit breaker failures)
+7. **Configurable Count**: Use `PERF_TEST_COUNT` environment variable to adjust data volume without code changes
 
 ## Version History
 
