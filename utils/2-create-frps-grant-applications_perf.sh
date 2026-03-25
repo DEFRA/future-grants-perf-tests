@@ -7,14 +7,17 @@ BASE_URL=https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud/fg-gas-ba
 
 # API authentication parameters
 # //copy from .env
-echo "Creating 50 FRPS grant applications..."
+X_API_KEY=wzRP3iTOrNoCMpWgW0H5xaUAdcQ5GsDg
+BEARER_TOKEN=99731eaa-43e6-44fe-a18c-25385c1a3a93
+
+echo "Creating 1000 FRPS grant applications..."
 
 
-# for i in $(seq 1 100); do
+# for i in $(seq 1 2); do
 #     CASE_REF="case-ref-$(date +%s)-$i"
-#     SBI="SBI$(printf "%03d" $i)"
-#     FRN="FIRM$(date +%s)$(printf "%04d" $i)$((RANDOM % 1000))"
-#     CRN="CUST$(printf "%04d" $i)"
+#     SBI="$((100000000 + i))"
+#     FRN="$((1000000000 + i))"
+#     CRN="$((1100000000 + i))"
 #     DEFRA_ID="DEFRA$(printf "%04d" $i)"
     
 #     # Generate random data for each application
@@ -41,7 +44,6 @@ echo "Creating 50 FRPS grant applications..."
 #     # Generate random numbers for addresses and phones
 #     HOUSE_NUM=$((RANDOM % 999 + 1))
 #     PHONE_SUFFIX=$((RANDOM % 999999 + 100000))
-#     MOBILE_SUFFIX=$((RANDOM % 999999 + 100000))
     
 #     # Generate emails based on names
 #     FIRST_LOWER=$(echo "$FIRST_NAME" | tr '[:upper:]' '[:lower:]')
@@ -50,7 +52,11 @@ echo "Creating 50 FRPS grant applications..."
     
 #     CUSTOMER_EMAIL="${FIRST_LOWER}.${LAST_LOWER}@example.com"
 #     BUSINESS_EMAIL="info@${BUSINESS_LOWER}.co.uk"
-    
+
+#     # Generate timestamps - createdAt is yesterday, submittedAt is today
+#     CREATED_AT=$(date -u -v-1d +"%Y-%m-%dT%H:%M:%S.000Z" 2>/dev/null || date -u -d "yesterday" +"%Y-%m-%dT%H:%M:%S.000Z")
+#     SUBMITTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+
 #     echo "Creating application with caseRef: $CASE_REF"
     
 #     PAYLOAD="{
@@ -60,22 +66,22 @@ echo "Creating 50 FRPS grant applications..."
 #             \"frn\": \"$FRN\",
 #             \"crn\": \"$CRN\",
 #             \"defraId\": \"$DEFRA_ID\",
-#             \"createdAt\": \"2025-03-27T10:34:52.000Z\",
-#             \"submittedAt\": \"2025-03-28T11:30:52.000Z\"
+#             \"createdAt\": \"$CREATED_AT\",
+#             \"submittedAt\": \"$SUBMITTED_AT\"
 #         },
 #         \"answers\": {
 #             \"rulesCalculations\": {
 #                 \"id\": $((2000 + i)),
 #                 \"message\": \"Application validated successfully\",
 #                 \"valid\": true,
-#                 \"date\": \"2025-11-21T10:10:43.673Z\"
+#                 \"date\": \"$SUBMITTED_AT\"
 #             },
 #             \"scheme\": \"SFI\",
 #             \"applicant\": {
 #                 \"business\": {
 #                     \"reference\": \"1101313269\",
-#                     \"email\": { \"address\": \"$BUSINESS_EMAIL\" },
-#                     \"phone\": { \"mobile\": \"0044770090$MOBILE_SUFFIX\" },
+#                     \"email\": \"$BUSINESS_EMAIL\",
+#                     \"phone\": \"0770090$PHONE_SUFFIX\",
 #                     \"name\": \"$BUSINESS_NAME\",
 #                     \"address\": {
 #                         \"line1\": \"$HOUSE_NUM $STREET\",
@@ -110,7 +116,7 @@ echo "Creating 50 FRPS grant applications..."
 #                         \"actions\": [
 #                             {
 #                                 \"code\": \"CMOR1\",
-#                                 \"version\": 1,
+#                                 \"version\": \"1\",
 #                                 \"durationYears\": 3,
 #                                 \"appliedFor\": {
 #                                     \"unit\": \"ha\",
@@ -119,7 +125,7 @@ echo "Creating 50 FRPS grant applications..."
 #                             },
 #                             {
 #                                 \"code\": \"UPL3\",
-#                                 \"version\": 1,
+#                                 \"version\": \"1\",
 #                                 \"durationYears\": 3,
 #                                 \"appliedFor\": {
 #                                     \"unit\": \"ha\",
@@ -138,7 +144,7 @@ echo "Creating 50 FRPS grant applications..."
 #                         \"actions\": [
 #                             {
 #                                 \"code\": \"CMOR1\",
-#                                 \"version\": 1,
+#                                 \"version\": \"1\",
 #                                 \"durationYears\": 3,
 #                                 \"appliedFor\": {
 #                                     \"unit\": \"ha\",
@@ -147,7 +153,7 @@ echo "Creating 50 FRPS grant applications..."
 #                             },
 #                             {
 #                                 \"code\": \"UPL1\",
-#                                 \"version\": 1,
+#                                 \"version\": \"1\",
 #                                 \"durationYears\": 3,
 #                                 \"appliedFor\": {
 #                                     \"unit\": \"ha\",
@@ -255,19 +261,27 @@ echo "Creating 50 FRPS grant applications..."
 #         }
 #     }"
     
-#     echo "=== PAYLOAD BEING SENT ==="
-#     echo "$PAYLOAD" | jq '.' 2>/dev/null || echo "$PAYLOAD"
-#     echo "=========================="
-    
+#     # echo "=== PAYLOAD BEING SENT ==="
+#     # echo "$PAYLOAD" | jq '.' 2>/dev/null || echo "$PAYLOAD"
+#     # echo "=========================="
+#     # sleep 2s
 #     # Validate JSON before sending
 #     if echo "$PAYLOAD" | jq '.' >/dev/null 2>&1; then
 #         echo "JSON is valid, sending request..."
-#         curl --location "$BASE_URL" \
+#         RESPONSE=$(curl -s -w "\n%{http_code}" --location "$BASE_URL" \
 #             --header 'accept: application/json' \
 #             --header 'Content-Type: application/json' \
 #             --header "x-api-key: $X_API_KEY" \
 #             --header "Authorization: Bearer $BEARER_TOKEN" \
-#             --data "$PAYLOAD"
+#             --data "$PAYLOAD")
+
+#         HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+#         BODY=$(echo "$RESPONSE" | sed '$d')
+
+#         echo "=== HTTP STATUS CODE: $HTTP_CODE ==="
+#         echo "=== RESPONSE BODY ==="
+#         echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+#         echo "===================="
 #     else
 #         echo "ERROR: JSON is invalid!"
 #         echo "$PAYLOAD" | jq '.' 2>&1
@@ -277,8 +291,8 @@ echo "Creating 50 FRPS grant applications..."
 #     echo "---"
 # done
 
-# echo "Completed creating 50 FRPS grant applications"
-# sleep 1m
+echo "Completed creating 50 FRPS grant applications"
+sleep 1m
 # API Base URL for cases endpoint (casework backend)
 CASEWORK_BASE_URL="https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud/fg-cw-backend"
 
@@ -286,7 +300,7 @@ echo "1. Getting all cases from casework backend..."
 RESPONSE=$(curl -s --location "${CASEWORK_BASE_URL}/cases" \
     --header 'Accept: application/json' \
     --header 'Accept-Encoding: identity' \
-    --header "Authorization: Bearer ${CW_BEARER_TOKEN}" \
+    --header "Authorization: Bearer ${BEARER_TOKEN}" \
     --header "x-api-key: ${X_API_KEY}")
 
 # Store response in JSON file with timestamp

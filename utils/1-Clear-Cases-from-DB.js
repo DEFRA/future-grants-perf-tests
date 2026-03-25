@@ -1,23 +1,11 @@
 print("🔍 Starting scan and cleanup of test references...\n");
 
-// Matches:
-// - perf strings
-// - case-ref-1767698381-1 style
-// - 512-ba9-2e8 style
-const CASE_REF_RE = /case-ref-\d{10,}-\d+/i;
-const SHORT_REF_RE = /\b[a-f0-9]{3}-[a-f0-9]{3}-[a-f0-9]{3}\b/i;
-
 // 👇 ONLY these collections will be scanned
 const allowedCollections = (() => {
   const dbName = db.getName();
 
-  if (dbName === "fg-gas-backend") {
-    return ["inbox", "outbox", "applications"];
-  }
-
-  if (dbName === "fg-cw-backend") {
-    return ["inbox", "outbox", "cases"];
-  }
+  if (dbName === "fg-gas-backend") return ["inbox", "outbox", "applications"];
+  if (dbName === "fg-cw-backend") return ["inbox", "outbox", "cases"];
 
   throw new Error(
     `❌ Refusing to run. Unknown DB: ${dbName}. Only allowed: fg-gas-backend, fg-cw-backend`
@@ -28,7 +16,7 @@ print(`✅ Connected DB: ${db.getName()}`);
 print(`✅ Collections targeted: ${allowedCollections.join(", ")}\n`);
 
 allowedCollections.forEach((collection) => {
-  // skip if collection doesn't exist
+
   if (!db.getCollectionNames().includes(collection)) {
     print(`⚠️ Collection not found, skipping: ${collection}`);
     return;
@@ -36,14 +24,20 @@ allowedCollections.forEach((collection) => {
 
   const cursor = db.getCollection(collection).find({
     $where: function () {
+
       const docStr = JSON.stringify(this);
+
+      const CASE_REF_RE  = /case-ref-\d{10,}-\d+/i;
+      const SHORT_REF_RE = /\b[a-z0-9]{3}-[a-z0-9]{3}-[a-z0-9]{3}\b/i;
+      const CLIENT_REF_RE = /\bclient[a-z0-9]{6,20}\b/i;
 
       return (
         docStr.includes("perf-test-client-ref") ||
         docStr.includes("frps-perf-test-client-ref") ||
         docStr.includes("client-perf") ||
         CASE_REF_RE.test(docStr) ||
-        SHORT_REF_RE.test(docStr)
+        SHORT_REF_RE.test(docStr) ||
+        CLIENT_REF_RE.test(docStr)
       );
     }
   });
