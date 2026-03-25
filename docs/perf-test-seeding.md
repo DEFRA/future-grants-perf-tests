@@ -271,23 +271,31 @@ curl --location 'https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud/f
 
 The JMeter script `scenarios/cw-journey-complete.jmx` is pre-configured to work in both environments.
 
-**For CDP Execution** (default configuration):
+**For CDP Execution** (default - no changes needed):
 - `BASE_URL_2`: `fg-cw-backend.perf-test.cdp-int.defra.cloud`
+- `PATH_PREFIX`: (empty)
 - `API_KEY`: (empty)
-- No changes needed
+- **Result URL**: `https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/perf-test-00000`
 
 **For Local Execution**:
 1. Open the JMeter script in JMeter GUI
-2. Update User Defined Variables:
-   - `BASE_URL_2`: `ephemeral-protected.api.perf-test.cdp-int.defra.cloud/fg-cw-backend`
+2. Navigate to: Test Plan > User Defined Variables
+3. Update these 3 variables:
+   - `BASE_URL_2`: `ephemeral-protected.api.perf-test.cdp-int.defra.cloud`
+   - `PATH_PREFIX`: `/fg-cw-backend`
    - `API_KEY`: Your Developer API key from CDP portal
-3. Run the test
+4. Save and run the test
+5. **Result URL**: `https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud/fg-cw-backend/cases/ref/perf-test-00000`
 
 **How it works**:
 - The script reads `caseRef` from CSV file `data/perf_test_case_refs_frps.csv`
-- Makes GET request to `/cases/ref/${caseRef}` with optional `x-api-key` header
+- Makes GET request to `${PATH_PREFIX}/cases/ref/${caseRef}` with `x-api-key` header (if API_KEY is set)
 - Extracts `caseId` from JSON response and stores as `_id` variable
 - All subsequent requests use `${_id}` to access the case
+
+**Where to find the x-api-key header in JMeter GUI**:
+- Expand: Thread Group > Get Case ID by Ref > API Key Header
+- This HeaderManager sends `x-api-key: ${API_KEY}` (empty if API_KEY variable is empty)
 
 ## Troubleshooting
 
