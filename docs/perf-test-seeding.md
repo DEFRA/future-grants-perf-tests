@@ -41,6 +41,7 @@ GAS Backend                          CW Backend
 
 - `/src/cases/perf-test-seed.js` - Seeds test users, clears test data
 - `/src/cases/index.js` - Calls `seedPerfTestData()` after migrations
+- `/src/cases/routes/find-case-id-by-ref.route.js` - Test endpoint to get case ID by caseRef
 
 ## Deployment Process
 
@@ -180,6 +181,70 @@ db.cases.find({}).limit(3).pretty();
 - Case refs: `FG-FRPS-*` (auto-generated)
 - Workflow: `frps-private-beta`
 - Status: `APPLICATION_RECEIVED`
+
+## Using Test Data in Performance Tests
+
+### Getting Case IDs at Runtime
+
+Performance tests can get case IDs dynamically using the test endpoint:
+
+**Endpoint**: `GET /cases/ref/{caseRef}`
+
+**Example**:
+```bash
+curl https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/perf-test-00000
+```
+
+**Response**:
+```json
+{
+  "caseRef": "perf-test-00000",
+  "caseId": "69c3cfca1fb0ed134838b6cb"
+}
+```
+
+**Features**:
+- ✅ No authentication required
+- ✅ Only works in perf-test environment (PERF_TEST_SEED=true)
+- ✅ Returns 404 in other environments for security
+- ✅ Returns 404 if case not found
+
+### Performance Test Usage
+
+**JavaScript/Node.js example**:
+```javascript
+// Loop through all test cases
+for (let i = 0; i < 15000; i++) {
+  const caseRef = `perf-test-${String(i).padStart(5, '0')}`;
+
+  // Get case ID
+  const response = await fetch(
+    `https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/${caseRef}`
+  );
+  const { caseId } = await response.json();
+
+  // Navigate browser to case
+  await browser.goto(
+    `https://fg-cw-frontend.perf-test.cdp-int.defra.cloud/cases/${caseId}`
+  );
+}
+```
+
+**JMeter example**:
+1. HTTP Request to get case ID:
+   - URL: `https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/perf-test-${caseNum}`
+   - Extract `caseId` from JSON response
+2. Use extracted `caseId` in subsequent requests
+
+**Testing from Local Machine**:
+
+Use the ephemeral gateway with your Developer API key:
+```bash
+curl --location 'https://ephemeral-protected.api.perf-test.cdp-int.defra.cloud/fg-cw-backend/cases/ref/perf-test-00000' \
+--header 'x-api-key: YOUR_API_KEY'
+```
+
+**Note**: Performance tests running inside CDP can access the backend directly without the ephemeral gateway.
 
 ## Troubleshooting
 
@@ -400,6 +465,7 @@ db.cases.countDocuments({});
 
 - `src/cases/perf-test-seed.js` - Main seeding logic
 - `src/cases/index.js` - Integration point
+- `src/cases/routes/find-case-id-by-ref.route.js` - Test endpoint to get case ID by caseRef
 - `migrations/20251114123000-add-frps-private-beta.js` - Workflow creation
 - `migrations/20251202150006-add-status-themes-to-frps.js` - Stage status themes
 - `migrations/20260324120000-add-themes-to-frps-task-status-options.js` - Task statusOptions themes
