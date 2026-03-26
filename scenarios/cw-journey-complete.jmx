@@ -31,7 +31,7 @@
         </collectionProp>
       </HeaderManager>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL_1" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_1</stringProp>
@@ -40,18 +40,18 @@
           </elementProp>
           <elementProp name="BASE_URL_2" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_2</stringProp>
-            <stringProp name="Argument.value">fg-cw-backend.perf-test.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.value">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="PATH_PREFIX" elementType="Argument">
             <stringProp name="Argument.name">PATH_PREFIX</stringProp>
-            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.value">/fg-cw-backend</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Leave empty for CDP execution. Set to /fg-cw-backend for local testing with ephemeral gateway.</stringProp>
           </elementProp>
           <elementProp name="API_KEY" elementType="Argument">
             <stringProp name="Argument.name">API_KEY</stringProp>
-            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.value">OTnLx3xDkJkc078Tu4JjR1hW19EgTrVU</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Leave empty for CDP execution. Set to your Developer API key for local testing.</stringProp>
           </elementProp>
@@ -89,7 +89,7 @@
         <boolProp name="CacheManager.controlledByThread">false</boolProp>
       </CacheManager>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
         <intProp name="ThreadGroup.num_threads">10</intProp>
         <intProp name="ThreadGroup.ramp_time">10</intProp>
         <longProp name="ThreadGroup.duration">0</longProp>
@@ -135,7 +135,7 @@
           <stringProp name="variableNames">caseRef</stringProp>
         </CSVDataSet>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Case ID by Ref" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Case ID by Ref">
           <stringProp name="HTTPSampler.domain">${BASE_URL_2}</stringProp>
           <stringProp name="HTTPSampler.port">0</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>

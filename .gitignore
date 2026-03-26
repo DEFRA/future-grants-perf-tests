@@ -25,6 +25,9 @@ test-results/
 .env.*.local
 config/secrets.json
 
+# Session cookies (generated at runtime, contains auth tokens)
+data/session-cookies.csv
+
 # JMeter temporary files
 jmeter.save.saveservice.output_format=xml
 PERFORMANCE_TESTS.md
