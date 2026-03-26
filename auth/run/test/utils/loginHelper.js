@@ -240,6 +240,14 @@ async function clickSignInWithRetry(maxRetries = 3) {
     await signInButton.click()
     await browser.pause(3000)
 
+    // Check for "Stay signed in?" prompt and click "No"
+    const staySignedInButton = await $('#idBtn_Back')
+    if (await staySignedInButton.isDisplayed()) {
+      console.log('Stay signed in prompt detected, clicking No...')
+      await staySignedInButton.click()
+      await browser.pause(3000)
+    }
+
     const currentUrl = await browser.getUrl()
     console.log(`Current URL: ${currentUrl}`)
 
