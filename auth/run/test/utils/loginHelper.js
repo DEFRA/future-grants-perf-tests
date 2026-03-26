@@ -88,27 +88,9 @@ export async function entraLoginAndDumpSessionCookie(
   await fs.mkdir(csvDir, { recursive: true })
   const csvFile = path.join(csvDir, 'session-cookies.csv')
 
-  // Check if CSV file exists and has content
-  let csvContent = ''
-  try {
-    const existingContent = await fs.readFile(csvFile, 'utf-8')
-    const lines = existingContent.trim().split('\n')
-    if (lines.length > 0 && lines[0] === 'cookieHeader') {
-      // File exists with header, append new cookie
-      csvContent = existingContent.trim() + '\n' + jmeterPayload.cookieHeader
-      console.log(`✓ Appended cookie to existing CSV file: ${csvFile}`)
-    } else {
-      // File exists but no header, recreate
-      csvContent = `cookieHeader\n${jmeterPayload.cookieHeader}`
-      console.log(`✓ Wrote CSV file to ${csvFile}`)
-    }
-  } catch (error) {
-    // File doesn't exist, create new with header
-    csvContent = `cookieHeader\n${jmeterPayload.cookieHeader}`
-    console.log(`✓ Wrote new CSV file to ${csvFile}`)
-  }
-
-  await fs.writeFile(csvFile, csvContent, 'utf-8')
+  // Append cookie to CSV (header already created by generate-multiple-cookies.sh)
+  await fs.appendFile(csvFile, jmeterPayload.cookieHeader + '\n', 'utf-8')
+  console.log(`✓ Appended cookie to ${csvFile}`)
 
   console.log(`\n📋 For JMeter, use this Cookie header:`)
   console.log(`   ${jmeterPayload.cookieHeader}`)

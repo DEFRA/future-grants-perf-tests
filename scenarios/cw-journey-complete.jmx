@@ -40,18 +40,19 @@
           </elementProp>
           <elementProp name="BASE_URL_2" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_2</stringProp>
-            <stringProp name="Argument.value">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.value">fg-cw-backend.perf-test.cdp-int.defra.cloud</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">CDP: fg-cw-backend.perf-test.cdp-int.defra.cloud | Local: ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
           </elementProp>
           <elementProp name="PATH_PREFIX" elementType="Argument">
             <stringProp name="Argument.name">PATH_PREFIX</stringProp>
-            <stringProp name="Argument.value">/fg-cw-backend</stringProp>
+            <stringProp name="Argument.value"></stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">Leave empty for CDP execution. Set to /fg-cw-backend for local testing with ephemeral gateway.</stringProp>
+            <stringProp name="Argument.desc">CDP: (empty) | Local: /fg-cw-backend</stringProp>
           </elementProp>
           <elementProp name="API_KEY" elementType="Argument">
             <stringProp name="Argument.name">API_KEY</stringProp>
-            <stringProp name="Argument.value">OTnLx3xDkJkc078Tu4JjR1hW19EgTrVU</stringProp>
+            <stringProp name="Argument.value">d3K0JuMio3mIaLn5cklFQ74I54UQbCI1</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Leave empty for CDP execution. Set to your Developer API key for local testing.</stringProp>
           </elementProp>
@@ -135,7 +136,7 @@
           <stringProp name="variableNames">caseRef</stringProp>
         </CSVDataSet>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Case ID by Ref">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get Case ID by Ref" enabled="true">
           <stringProp name="HTTPSampler.domain">${BASE_URL_2}</stringProp>
           <stringProp name="HTTPSampler.port">0</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
@@ -1141,7 +1142,7 @@
           </hashTree>
         </hashTree>
       </hashTree>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>

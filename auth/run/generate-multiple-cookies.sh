@@ -9,10 +9,11 @@ echo "========================================"
 echo "Generating $COUNT session cookies"
 echo "========================================"
 
-# Clear existing CSV file
+# Clear existing CSV file and create fresh with header
 CSV_FILE="../../data/session-cookies.csv"
-rm -f "$CSV_FILE"
-echo "✓ Cleared existing cookies"
+mkdir -p "../../data"
+echo "cookieHeader" > "$CSV_FILE"
+echo "✓ Created fresh CSV file with header"
 
 # Generate cookies
 for i in $(seq 1 $COUNT); do
