@@ -51,7 +51,7 @@ EOF
 echo "✓ Entra ID credentials configured"
 
 # Generate session cookies (10 cookies by default)
-COOKIE_COUNT=${COOKIE_COUNT:-2}
+COOKIE_COUNT=${COOKIE_COUNT:-10}
 echo "Generating ${COOKIE_COUNT} session cookies..."
 
 chmod +x generate-multiple-cookies.sh
@@ -79,6 +79,8 @@ echo ""
 # ============================================
 # Run the test suite
 # ============================================
+# Increase JVM heap size to prevent OutOfMemoryError during report generation
+export JVM_ARGS="-Xms1g -Xmx3g"
 jmeter -n -t ${SCENARIOFILE} -e -l "${REPORTFILE}" -o ${JM_REPORTS} -j ${LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}"
 
 # Publish the results into S3 so they can be displayed in the CDP Portal
