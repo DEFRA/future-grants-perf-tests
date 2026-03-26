@@ -143,31 +143,95 @@ export async function performLocalLogin(username, password) {
   await clickButtonByText('Login')
 }
 
+async function findVisibleElement(selector, timeout = 30000) {
+  await browser.waitUntil(async () => {
+    const elements = await $$(selector)
+    for (const el of elements) {
+      if (await el.isDisplayed()) return true
+    }
+    return false
+  }, {
+    timeout,
+    interval: 500,
+    timeoutMsg: `No visible element found for selector: ${selector}`
+  })
+
+  const elements = await $$(selector)
+  for (const el of elements) {
+    if (await el.isDisplayed()) return el
+  }
+
+  throw new Error(`Visible element vanished for selector: ${selector}`)
+}
+
 async function performLogin(username, password) {
   console.log('Looking for email field...')
-  // Use name attribute which is more stable than id
-  const emailField = await $('[name="loginfmt"]')
-  await emailField.waitForDisplayed({ timeout: 15000 })
+  const emailField = await findVisibleElement('input[name="loginfmt"]', 15000)
   console.log('Email field found, entering username...')
   await emailField.setValue(username)
 
   console.log('Clicking Next button...')
-  const nextButton = await $('#idSIButton9')
+  const nextButton = await findVisibleElement('#idSIButton9', 10000)
   await nextButton.waitForClickable({ timeout: 10000 })
   await nextButton.click()
 
-  // Give the page time to transition
-  await browser.pause(2000)
+  console.log('Waiting for next auth state...')
+  await browser.waitUntil(async () => {
+    const pwds = await $$('input[name="passwd"]')
+    for (const el of pwds) {
+      if (await el.isDisplayed()) return true
+    }
 
-  console.log('Waiting for password field...')
-  // Use name attribute which is more stable than id
-  const passwordField = await $('[name="passwd"]')
-  await passwordField.waitForDisplayed({ timeout: 20000 })
+    // Add other possible states here if needed
+    return false
+  }, {
+    timeout: 30000,
+    interval: 500,
+    timeoutMsg: 'Password field did not become visible after clicking Next'
+  })
+
+  console.log('Inspecting password fields...')
+  const pwds = await $$('input[name="passwd"]')
+  for (let i = 0; i < pwds.length; i++) {
+    console.log(`Password field ${i}:`, {
+      displayed: await pwds[i].isDisplayed(),
+      ariaHidden: await pwds[i].getAttribute('aria-hidden'),
+      class: await pwds[i].getAttribute('class'),
+      tabindex: await pwds[i].getAttribute('tabindex')
+    })
+  }
+
+  const passwordField = await findVisibleElement('input[name="passwd"]', 5000)
   console.log('Password field found, entering password...')
   await passwordField.setValue(password)
 
   await clickSignInWithRetry()
 }
+// async function performLogin(username, password) {
+//   console.log('Looking for email field...')
+//   // Use name attribute which is more stable than id
+//   const emailField = await $('[name="loginfmt"]')
+//   await emailField.waitForDisplayed({ timeout: 15000 })
+//   console.log('Email field found, entering username...')
+//   await emailField.setValue(username)
+
+//   console.log('Clicking Next button...')
+//   const nextButton = await $('#idSIButton9')
+//   await nextButton.waitForClickable({ timeout: 10000 })
+//   await nextButton.click()
+
+//   // Give the page time to transition
+//   await browser.pause(2000)
+
+//   console.log('Waiting for password field...')
+//   // Use name attribute which is more stable than id
+//   const passwordField = await $('[name="passwd"]')
+//   await passwordField.waitForDisplayed({ timeout: 20000 })
+//   console.log('Password field found, entering password...')
+//   await passwordField.setValue(password)
+
+//   await clickSignInWithRetry()
+// }
 
 async function waitForAppLoadOrRetry(expectedDomain, username, password) {
   let retryCount = 0
