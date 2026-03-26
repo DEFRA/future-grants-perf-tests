@@ -23,38 +23,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-
-      - name: Install auth dependencies
-        run: |
-          cd auth/run
-          npm ci
-
-      - name: Generate session cookies
-        env:
-          ENTRA_ID_USERNAME: ${{ secrets.ENTRA_ID_USERNAME }}
-          ENTRA_ID_PASSWORD: ${{ secrets.ENTRA_ID_PASSWORD }}
-        run: |
-          cd auth/run
-          npm run entra-login:multi 10
-
-      - name: Verify cookies generated
-        run: |
-          if [ ! -f data/session-cookies.csv ]; then
-            echo "❌ Failed to generate session cookies"
-            exit 1
-          fi
-          COOKIE_COUNT=$(tail -n +2 data/session-cookies.csv | wc -l | tr -d ' ')
-          echo "✅ Generated $COOKIE_COUNT session cookies"
-
       - name: Build the test suite
         uses: DEFRA/cdp-build-action/build-test@main
         with:
