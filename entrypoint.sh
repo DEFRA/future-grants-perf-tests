@@ -87,6 +87,7 @@ jmeter -n -t ${SCENARIOFILE} -e -l "${REPORTFILE}" -o ${JM_REPORTS} -j ${LOGFILE
 if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
   # Copy the CSV report file and the generated report files to the S3 bucket
    if [ -f "$JM_REPORTS/index.html" ]; then
+      aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
       aws --endpoint-url=$S3_ENDPOINT s3 cp "$REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$REPORTFILE"
       aws --endpoint-url=$S3_ENDPOINT s3 cp "$JM_REPORTS" "$RESULTS_OUTPUT_S3_PATH" --recursive
       if [ $? -eq 0 ]; then
