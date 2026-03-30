@@ -236,7 +236,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">32583</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -287,7 +287,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">16189</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -361,7 +361,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">18693</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -416,7 +416,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">20443</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -509,7 +509,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">17521</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -861,8 +861,8 @@
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">19789</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+              <stringProp name="ConstantTimer.delay">10000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -905,7 +905,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">18319</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -929,7 +929,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">16124</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -952,8 +952,8 @@
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">10535</stringProp>
+            <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer">
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -977,7 +977,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">10857</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -1014,7 +1014,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">19212</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -1057,7 +1057,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">35162</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -1094,7 +1094,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">13983</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
@@ -1137,7 +1137,7 @@
           </HTTPSamplerProxy>
           <hashTree>
             <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-              <stringProp name="ConstantTimer.delay">13867</stringProp>
+              <stringProp name="ConstantTimer.delay">4000</stringProp>
             </ConstantTimer>
             <hashTree/>
           </hashTree>
