@@ -75,3 +75,16 @@
   - Changes to package.json or package-lock.json
   - Changes to migration files
   - Changes to the same files you modified in hotfix
+
+Then go to https://github.com/DEFRA/fg-cw-backend/actions
+Click on 'Publish hot fix'
+Clcik on run workflow and select the branch hotfix/perf-test-seed
+And click 'Run workflow'
+
+Go to https://github.com/DEFRA/fg-gas-backend/actions
+Click on 'Publish hot fix'
+Clcik on run workflow and select the branch hotfix/perf-test-seed
+And click 'Run workflow'
+
+Deploy both hotfix branches to the perf-test environment
+Deploy the latest UI
