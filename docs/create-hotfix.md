@@ -4,6 +4,7 @@
   cd /Users/nitinmali/workspace/farming/fg-cw-backend
 
   # 2. Ensure you have latest changes from remote
+  git checkout main
   git fetch origin
 
   # 3. Checkout the hotfix branch
@@ -31,6 +32,7 @@
   cd /Users/nitinmali/workspace/farming/fg-gas-backend
 
   # 2. Ensure you have latest changes from remote
+  git checkout main
   git fetch origin
 
   # 3. Checkout the hotfix branch
@@ -86,5 +88,5 @@ Click on 'Publish hot fix'
 Clcik on run workflow and select the branch hotfix/perf-test-seed
 And click 'Run workflow'
 
-Deploy both hotfix branches to the perf-test environment
+Deploy both hotfix branches to the perf-test environment (Refer to future-grants-perf-tests/docs/how-to-run-tests.md)
 Deploy the latest UI

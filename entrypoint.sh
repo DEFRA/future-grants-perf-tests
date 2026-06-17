@@ -15,9 +15,6 @@ JM_DATA=${JM_HOME}/data
 
 mkdir -p ${JM_REPORTS} ${JM_LOGS}
 
-SCENARIOFILE=${JM_SCENARIOS}/${TEST_SCENARIO}.jmx
-REPORTFILE=${NOW}-perftest-${TEST_SCENARIO}-report.csv
-LOGFILE=${JM_LOGS}/perftest-${TEST_SCENARIO}.log
 
 # ============================================
 # Generate Session Cookies for JMeter
@@ -77,33 +74,77 @@ echo "========================================"
 echo ""
 
 # ============================================
-# Run the test suite
+# Run the test suites in parallel
 # ============================================
 # Increase JVM heap size to prevent OutOfMemoryError during report generation
 export JVM_ARGS="-Xms1g -Xmx3g"
-jmeter -n -t ${SCENARIOFILE} -e -l "${REPORTFILE}" -o ${JM_REPORTS} -j ${LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}"
+
+CW_SCENARIO=cw-journey-complete
+WMP_SCENARIO=wmp-journey-complete
+
+CW_SCENARIOFILE=${JM_SCENARIOS}/${CW_SCENARIO}.jmx
+WMP_SCENARIOFILE=${JM_SCENARIOS}/${WMP_SCENARIO}.jmx
+
+CW_REPORTFILE=${NOW}-perftest-${CW_SCENARIO}-report.csv
+WMP_REPORTFILE=${NOW}-perftest-${WMP_SCENARIO}-report.csv
+
+CW_REPORTS=${JM_REPORTS}/cw
+WMP_REPORTS=${JM_REPORTS}/wmp
+
+CW_LOGFILE=${JM_LOGS}/perftest-${CW_SCENARIO}.log
+WMP_LOGFILE=${JM_LOGS}/perftest-${WMP_SCENARIO}.log
+
+mkdir -p ${CW_REPORTS} ${WMP_REPORTS}
+
+echo "Starting cw-journey-complete and wmp-journey-complete in parallel..."
+
+jmeter -n -t ${CW_SCENARIOFILE} -e -l "${CW_REPORTFILE}" -o ${CW_REPORTS} -j ${CW_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" &
+CW_PID=$!
+
+jmeter -n -t ${WMP_SCENARIOFILE} -e -l "${WMP_REPORTFILE}" -o ${WMP_REPORTS} -j ${WMP_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" &
+WMP_PID=$!
+
+wait ${CW_PID}
+CW_EXIT=$?
+
+wait ${WMP_PID}
+WMP_EXIT=$?
+
+echo "cw-journey-complete exit code: ${CW_EXIT}"
+echo "wmp-journey-complete exit code: ${WMP_EXIT}"
 
 # Publish the results into S3 so they can be displayed in the CDP Portal
 if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
-  # Copy the CSV report file and the generated report files to the S3 bucket
-   if [ -f "$JM_REPORTS/index.html" ]; then
-      aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
-      aws --endpoint-url=$S3_ENDPOINT s3 cp "$REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$REPORTFILE"
-      aws --endpoint-url=$S3_ENDPOINT s3 cp "$JM_REPORTS" "$RESULTS_OUTPUT_S3_PATH" --recursive
-      if [ $? -eq 0 ]; then
-        echo "CSV report file and test results published to $RESULTS_OUTPUT_S3_PATH"
-      fi
-   else
-      echo "$JM_REPORTS/index.html is not found"
-      exit 1
-   fi
+  if [ -f "${CW_REPORTS}/index.html" ] || [ -f "${WMP_REPORTS}/index.html" ]; then
+    aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
+    aws --endpoint-url=$S3_ENDPOINT s3 cp "$CW_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$CW_REPORTFILE"
+    aws --endpoint-url=$S3_ENDPOINT s3 cp "$WMP_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$WMP_REPORTFILE"
+    aws --endpoint-url=$S3_ENDPOINT s3 cp "$JM_REPORTS" "$RESULTS_OUTPUT_S3_PATH" --recursive
+    if [ $? -eq 0 ]; then
+      echo "Test results published to $RESULTS_OUTPUT_S3_PATH"
+      echo "  CW report:  $RESULTS_OUTPUT_S3_PATH/cw/index.html"
+      echo "  WMP report: $RESULTS_OUTPUT_S3_PATH/wmp/index.html"
+    fi
+  else
+    echo "No index.html found in either report directory"
+    exit 1
+  fi
 else
-   echo "RESULTS_OUTPUT_S3_PATH is not set"
-   exit 1
+  echo "RESULTS_OUTPUT_S3_PATH is not set"
+  exit 1
 fi
 
-# exit non-zero if failures reported
-if grep -q ',false,' ${REPORTFILE}; then
-    echo "RESULTS CONTAIN FAILURES, EXITING NON-ZERO"
-    exit 1
+# Exit non-zero if either test had failures
+FAILURES=0
+if grep -q ',false,' "${CW_REPORTFILE}" 2>/dev/null; then
+  echo "cw-journey-complete CONTAINS FAILURES"
+  FAILURES=1
+fi
+if grep -q ',false,' "${WMP_REPORTFILE}" 2>/dev/null; then
+  echo "wmp-journey-complete CONTAINS FAILURES"
+  FAILURES=1
+fi
+if [ ${FAILURES} -eq 1 ]; then
+  echo "RESULTS CONTAIN FAILURES, EXITING NON-ZERO"
+  exit 1
 fi

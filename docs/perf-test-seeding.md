@@ -18,7 +18,8 @@ This document describes the performance test data seeding feature for the fg-cw-
 | Variable | Required | Default | Description | Example |
 |----------|----------|---------|-------------|---------|
 | `PERF_TEST_SEED` | Yes | - | Enables perf test seeding. Only set in perf-test environment. | `true` |
-| `PERF_TEST_COUNT` | No | `1000` | Number of test applications to create in GAS (and cases in CW). | `100`, `1000`, `15000` |
+| `PERF_TEST_COUNT` | No | `100` | Number of FRPS test applications to create. | `100`, `1000`, `15000` |
+| `PERF_TEST_WMP_COUNT` | No | `100` | Number of WMP test applications to create. | `10`, `100` |
 
 **Setting in CDP**:
 1. Go to your service configuration in CDP
@@ -26,9 +27,9 @@ This document describes the performance test data seeding feature for the fg-cw-
 3. Deploy the service
 
 **Examples**:
-- Small test: `PERF_TEST_COUNT=100` → 100 applications/cases
-- Default: `PERF_TEST_COUNT=1000` → 1,000 applications/cases
-- Full load: `PERF_TEST_COUNT=15000` → 15,000 applications/cases
+- Default: 100 FRPS + 100 WMP applications (no env vars needed)
+- Large FRPS run: `PERF_TEST_COUNT=1000` → 1,000 FRPS + 100 WMP applications
+- Full load: `PERF_TEST_COUNT=15000` → 15,000 FRPS + 100 WMP applications
 
 ## Architecture
 
@@ -136,22 +137,27 @@ Running migrations
 Finished running migrations
 server started
 Starting outbox subscriber
-Target application count: 1000
 🧹 Starting performance test data seeding...
-📝 Creating 1000 test applications...
-   ✓ Created 100/1000 applications
-   ✓ Created 200/1000 applications
+   Target FRPS application count: 1000
+   Target WMP application count: 100
+⚠️  This will CLEAR ALL DATA in test collections
+📝 Creating 1000 FRPS test applications...
+   ✓ Created 100/1000 FRPS applications
    ...
-   ✓ Created 1000/1000 applications
+   ✓ Created all 1000 FRPS applications
+📝 Creating 100 WMP test applications...
+   ✓ Created 10/100 WMP applications
+   ...
+   ✓ Created all 100 WMP applications
 ✅ Performance test data seeding complete!
-   Total applications: 1000
-   Client refs: perf-test-00000 to perf-test-00999
+   FRPS: 1000 applications (perf-test-00000 to perf-test-00999)
+   WMP:  100 applications (wmp-perf-test-00000 to wmp-perf-test-00099)
 ```
 
 **Note**:
 - Seeding runs in **background** after server starts to avoid ECS health check timeouts
-- Count shown depends on `PERF_TEST_COUNT` environment variable (default: 1000)
-- For 15,000 applications, set `PERF_TEST_COUNT=15000`
+- FRPS count: `PERF_TEST_COUNT` environment variable (default: 1000)
+- WMP count: `PERF_TEST_WMP_COUNT` environment variable (default: 100)
 
 #### 3. Verify Case Creation in CW
 
@@ -177,7 +183,7 @@ db.cases.find({}).limit(3).pretty();
 
 ### GAS Backend
 
-**N Applications** (N = `PERF_TEST_COUNT`, default 1000):
+**N FRPS Applications** (N = `PERF_TEST_COUNT`, default 1000):
 
 - Scheme: `frps-private-beta`
 - Client refs: `perf-test-00000` to `perf-test-{N-1}` (padded to 5 digits)
@@ -185,6 +191,14 @@ db.cases.find({}).limit(3).pretty();
   - Example with 15000: `perf-test-00000` to `perf-test-14999`
 - SBI range: `107000000` to `107000000 + N - 1`
 - FRN/CRN range: `1100000000` to `1100000000 + N - 1`
+
+**M WMP Applications** (M = `PERF_TEST_WMP_COUNT`, default 100):
+
+- Scheme: `woodland`
+- Client refs: `wmp-perf-test-00000` to `wmp-perf-test-{M-1}` (padded to 5 digits)
+  - Example with 100: `wmp-perf-test-00000` to `wmp-perf-test-00099`
+- SBI: `106284736` (fixed — must match CRN)
+- FRN/CRN: `1102838829` (fixed — SBI/CRN pair must match; CRN also matches `data/agreements-credentials.csv` for OIDC login in `wmp-journey-complete.jmx`)
 
 ### CW Backend
 

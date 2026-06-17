@@ -31,6 +31,7 @@ try {
 }
 
 const debug = process.env.DEBUG === 'true'
+const local = process.env.LOCAL === 'true'
 
 // Import child_process to start chromedriver manually
 import { spawn } from 'node:child_process'
@@ -88,7 +89,7 @@ export const config = {
             ]
       },
       // Only use proxy in CDP environment (not locally)
-      ...(debug ? {} : {
+      ...(debug || local ? {} : {
         proxy: {
           proxyType: 'manual',
           httpProxy: 'localhost:3128',

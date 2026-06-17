@@ -66,21 +66,23 @@ git push
 
 ## Step 2: Deploy Hotfix Branches
 
-### 2.1 Deploy fg-gas-backend Hotfix
+**Deploy CW first, then GAS.** CW must be running and its inbox subscriber ready before GAS publishes SQS messages. If GAS deploys first, CW's seed script will wipe any cases that arrived while CW was starting up.
 
-This creates applications in GAS that flow to CW via SQS.
+### 2.1 Deploy fg-cw-backend Hotfix First
 
-1. Navigate to CDP Portal → Deployments
-2. Deploy `fg-gas-backend` branch `hotfix/perf-test-seed` to `perf-test` environment
-3. Wait for deployment to complete
-4. Check logs for: `✅ Performance test data seeding complete!`
-
-### 2.2 Deploy fg-cw-backend Hotfix
-
-This creates test users in CW and receives cases from GAS.
+This creates test users and prepares CW to receive cases from GAS via SQS.
 
 1. Navigate to CDP Portal → Deployments
 2. Deploy `fg-cw-backend` branch `hotfix/perf-test-seed` to `perf-test` environment
+3. Wait for deployment to complete
+4. Check logs for: `⏭️  Perf test data already seeded with 2 test users, skipping` (or created if first time)
+
+### 2.2 Deploy fg-gas-backend Hotfix Second
+
+This seeds applications in GAS, which flow to CW as cases via SQS.
+
+1. Navigate to CDP Portal → Deployments
+2. Deploy `fg-gas-backend` branch `hotfix/perf-test-seed` to `perf-test` environment
 3. Wait for deployment to complete
 4. Check logs for: `✅ Performance test data seeding complete!`
 
@@ -515,11 +517,11 @@ Use this checklist before each test run:
   - [ ] Format is `perf-test-00000`, `perf-test-00001`, etc.
   - [ ] Changes committed and pushed
 
-- [ ] **2. Hotfix branches deployed**
-  - [ ] `fg-gas-backend/hotfix/perf-test-seed` deployed to `perf-test`
-  - [ ] `fg-cw-backend/hotfix/perf-test-seed` deployed to `perf-test`
-  - [ ] Both deployments completed successfully
-  - [ ] Seeding logs show success
+- [ ] **2. Hotfix branches deployed (CW first, then GAS)**
+  - [ ] `fg-cw-backend/hotfix/perf-test-seed` deployed to `perf-test` first
+  - [ ] CW deployment completed and inbox subscriber running
+  - [ ] `fg-gas-backend/hotfix/perf-test-seed` deployed to `perf-test` second
+  - [ ] GAS seeding logs show `✅ Performance test data seeding complete!`
 
 - [ ] **3. Environment variables set correctly**
   - [ ] `PERF_TEST_SEED=true` on both GAS and CW
