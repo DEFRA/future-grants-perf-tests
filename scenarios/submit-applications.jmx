@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="submit-applications">
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="BASE_URL" elementType="Argument">
+            <stringProp name="Argument.name">BASE_URL</stringProp>
+            <stringProp name="Argument.value">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">CDP: fg-gas-backend.perf-test.cdp-int.defra.cloud | Local: ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+          </elementProp>
+          <elementProp name="PATH_PREFIX" elementType="Argument">
+            <stringProp name="Argument.name">PATH_PREFIX</stringProp>
+            <stringProp name="Argument.value">/fg-gas-backend</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">CDP: (empty) | Local: /fg-gas-backend</stringProp>
+          </elementProp>
+          <elementProp name="API_KEY" elementType="Argument">
+            <stringProp name="Argument.name">API_KEY</stringProp>
+            <stringProp name="Argument.value">llymCiiA8i90Z6R9CKbhElnlPEfJOdZm</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Leave empty for CDP execution. Set to your Developer API key for local testing.</stringProp>
+          </elementProp>
+          <elementProp name="AUTH_TOKEN" elementType="Argument">
+            <stringProp name="Argument.name">AUTH_TOKEN</stringProp>
+            <stringProp name="Argument.value">99731eaa-43e6-44fe-a18c-25385c1a3a93</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Bearer token for GAS authorisation</stringProp>
+          </elementProp>
+          <elementProp name="TOTAL_APPLICATIONS" elementType="Argument">
+            <stringProp name="Argument.name">TOTAL_APPLICATIONS</stringProp>
+            <stringProp name="Argument.value">60</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Total number of applications to submit</stringProp>
+          </elementProp>
+          <elementProp name="DELAY_MS" elementType="Argument">
+            <stringProp name="Argument.name">DELAY_MS</stringProp>
+            <stringProp name="Argument.value">600</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Delay between requests in ms. Formula: (DURATION_HOURS * 3600000) / TOTAL_APPLICATIONS. Default: 1hr / 600 = 6000ms</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="Generate Run ID" enabled="true">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </SetupThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Set Run ID" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="script">def runId = new Date().format(&quot;yyyyMMddHHmmss&quot;)
+props.put(&quot;runId&quot;, runId)
+log.info(&quot;Run ID set to: &quot; + runId)</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">false</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Submit Applications" enabled="true">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
+          <stringProp name="LoopController.loops">${TOTAL_APPLICATIONS}</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Application Counter" enabled="true">
+          <stringProp name="CounterConfig.start">1</stringProp>
+          <stringProp name="CounterConfig.end">${TOTAL_APPLICATIONS}</stringProp>
+          <stringProp name="CounterConfig.incr">1</stringProp>
+          <stringProp name="CounterConfig.name">counter</stringProp>
+          <stringProp name="CounterConfig.format">00000</stringProp>
+          <boolProp name="CounterConfig.per_user">false</boolProp>
+        </CounterConfig>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Submit Application" enabled="true">
+          <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+          <stringProp name="HTTPSampler.port">0</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.path">${PATH_PREFIX}/grants/frps-private-beta/applications</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;metadata&quot;: {&#xd;
+    &quot;clientRef&quot;: &quot;load-test-${__P(runId)}-${counter}&quot;,&#xd;
+    &quot;sbi&quot;: &quot;106284736&quot;,&#xd;
+    &quot;frn&quot;: &quot;1234567890&quot;,&#xd;
+    &quot;crn&quot;: &quot;1102838829&quot;,&#xd;
+    &quot;submittedAt&quot;: &quot;2025-03-28T11:30:52.000Z&quot;,&#xd;
+    &quot;configVersion&quot;: &quot;1.0.0&quot;&#xd;
+  },&#xd;
+  &quot;answers&quot;: {&#xd;
+    &quot;rulesCalculations&quot;: {&#xd;
+      &quot;id&quot;: 2979,&#xd;
+      &quot;message&quot;: &quot;Application validated successfully&quot;,&#xd;
+      &quot;valid&quot;: true,&#xd;
+      &quot;date&quot;: &quot;2025-03-28T11:30:52.000Z&quot;,&#xd;
+      &quot;caveats&quot;: [&#xd;
+        {&#xd;
+          &quot;code&quot;: &quot;ne-consent-required&quot;,&#xd;
+          &quot;description&quot;: &quot;A consent is required from Natural England&quot;,&#xd;
+          &quot;metadata&quot;: {&#xd;
+            &quot;actionCode&quot;: &quot;UPL1&quot;,&#xd;
+            &quot;parcelId&quot;: &quot;7656&quot;,&#xd;
+            &quot;sheetId&quot;: &quot;SD6352&quot;,&#xd;
+            &quot;percentageOverlap&quot;: 2.14,&#xd;
+            &quot;overlapAreaHectares&quot;: 0.0336&#xd;
+          }&#xd;
+        }&#xd;
+      ]&#xd;
+    },&#xd;
+    &quot;scheme&quot;: &quot;SFI&quot;,&#xd;
+    &quot;applicant&quot;: {&#xd;
+      &quot;business&quot;: {&#xd;
+        &quot;reference&quot;: &quot;1101091126&quot;,&#xd;
+        &quot;email&quot;: &quot;texelshirecontractingg@gnitcartnocerihslexeto.com.test&quot;,&#xd;
+        &quot;mobilePhoneNumber&quot;: &quot;07713973104&quot;,&#xd;
+        &quot;landlinePhoneNumber&quot;: &quot;01235863957&quot;,&#xd;
+        &quot;name&quot;: &quot;Texels Hire &amp; Contracting&quot;,&#xd;
+        &quot;address&quot;: {&#xd;
+          &quot;line1&quot;: &quot;Benbrigge House - line 1&quot;,&#xd;
+          &quot;line2&quot;: &quot;ALBRIGHTON - line 2&quot;,&#xd;
+          &quot;line3&quot;: &quot;Cuckoo Hill Farm - line 3&quot;,&#xd;
+          &quot;line4&quot;: &quot;Cuckoo Hill Farm -line 4&quot;,&#xd;
+          &quot;line5&quot;: &quot;Farm road -line 5&quot;,&#xd;
+          &quot;street&quot;: &quot;BRIDGE ROAD - Street&quot;,&#xd;
+          &quot;city&quot;: &quot;GRIMSBY - City&quot;,&#xd;
+          &quot;postalCode&quot;: &quot;DY13 0UY&quot;&#xd;
+        }&#xd;
+      },&#xd;
+      &quot;customer&quot;: {&#xd;
+        &quot;name&quot;: {&#xd;
+          &quot;title&quot;: &quot;Mr&quot;,&#xd;
+          &quot;first&quot;: &quot;Graham&quot;,&#xd;
+          &quot;middle&quot;: &quot;Lisa&quot;,&#xd;
+          &quot;last&quot;: &quot;Gilfoyle&quot;&#xd;
+        }&#xd;
+      }&#xd;
+    },&#xd;
+    &quot;totalAnnualPaymentPence&quot;: 70284,&#xd;
+    &quot;application&quot;: {&#xd;
+      &quot;parcel&quot;: [&#xd;
+        {&#xd;
+          &quot;sheetId&quot;: &quot;SK0971&quot;,&#xd;
+          &quot;parcelId&quot;: &quot;7555&quot;,&#xd;
+          &quot;area&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 5.2182 },&#xd;
+          &quot;actions&quot;: [&#xd;
+            { &quot;code&quot;: &quot;CMOR1&quot;, &quot;version&quot;: &quot;1&quot;, &quot;durationYears&quot;: 3, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 4.7575 } },&#xd;
+            { &quot;code&quot;: &quot;UPL3&quot;, &quot;version&quot;: &quot;1&quot;, &quot;durationYears&quot;: 3, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 4.7575 } }&#xd;
+          ]&#xd;
+        },&#xd;
+        {&#xd;
+          &quot;sheetId&quot;: &quot;SK0971&quot;,&#xd;
+          &quot;parcelId&quot;: &quot;9194&quot;,&#xd;
+          &quot;area&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1703 },&#xd;
+          &quot;actions&quot;: [&#xd;
+            { &quot;code&quot;: &quot;CMOR1&quot;, &quot;version&quot;: &quot;1&quot;, &quot;durationYears&quot;: 3, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1705 } },&#xd;
+            { &quot;code&quot;: &quot;UPL1&quot;, &quot;version&quot;: &quot;1&quot;, &quot;durationYears&quot;: 3, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1705 } }&#xd;
+          ]&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;agreement&quot;: []&#xd;
+    },&#xd;
+    &quot;payments&quot;: {&#xd;
+      &quot;parcel&quot;: [&#xd;
+        {&#xd;
+          &quot;sheetId&quot;: &quot;SK0971&quot;,&#xd;
+          &quot;parcelId&quot;: &quot;7555&quot;,&#xd;
+          &quot;area&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 5.2182 },&#xd;
+          &quot;actions&quot;: [&#xd;
+            { &quot;code&quot;: &quot;CMOR1&quot;, &quot;description&quot;: &quot;Assess moorland and produce a written record&quot;, &quot;durationYears&quot;: 3, &quot;paymentRates&quot;: 1060, &quot;annualPaymentPence&quot;: 5042, &quot;eligible&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 4.7575 }, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 4.7575 } },&#xd;
+            { &quot;code&quot;: &quot;UPL3&quot;, &quot;description&quot;: &quot;Limited livestock grazing on moorland&quot;, &quot;durationYears&quot;: 3, &quot;paymentRates&quot;: 6600, &quot;annualPaymentPence&quot;: 31399, &quot;eligible&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 4.7575 }, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 4.7575 } }&#xd;
+          ]&#xd;
+        },&#xd;
+        {&#xd;
+          &quot;sheetId&quot;: &quot;SK0971&quot;,&#xd;
+          &quot;parcelId&quot;: &quot;9194&quot;,&#xd;
+          &quot;area&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1703 },&#xd;
+          &quot;actions&quot;: [&#xd;
+            { &quot;code&quot;: &quot;CMOR1&quot;, &quot;description&quot;: &quot;Assess moorland and produce a written record&quot;, &quot;durationYears&quot;: 3, &quot;paymentRates&quot;: 1060, &quot;annualPaymentPence&quot;: 2300, &quot;eligible&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1705 }, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1705 } },&#xd;
+            { &quot;code&quot;: &quot;UPL1&quot;, &quot;description&quot;: &quot;Moderate livestock grazing on moorland&quot;, &quot;durationYears&quot;: 3, &quot;paymentRates&quot;: 2000, &quot;annualPaymentPence&quot;: 4341, &quot;eligible&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1705 }, &quot;appliedFor&quot;: { &quot;unit&quot;: &quot;ha&quot;, &quot;quantity&quot;: 2.1705 } }&#xd;
+          ]&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;agreement&quot;: [&#xd;
+        { &quot;code&quot;: &quot;CMOR1&quot;, &quot;description&quot;: &quot;Assess moorland and produce a written record&quot;, &quot;durationYears&quot;: 3, &quot;paymentRates&quot;: 27200, &quot;annualPaymentPence&quot;: 27200 }&#xd;
+      ]&#xd;
+    }&#xd;
+  }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Request Headers" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="Accept" elementType="Header">
+                <stringProp name="Header.name">Accept</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+              <elementProp name="Accept-Encoding" elementType="Header">
+                <stringProp name="Header.name">Accept-Encoding</stringProp>
+                <stringProp name="Header.value">identity</stringProp>
+              </elementProp>
+              <elementProp name="Authorization" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${AUTH_TOKEN}</stringProp>
+              </elementProp>
+              <elementProp name="x-api-key" elementType="Header">
+                <stringProp name="Header.name">x-api-key</stringProp>
+                <stringProp name="Header.value">${API_KEY}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert 204" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49590">204</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message">Expected HTTP 204 but got a different status code</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Pacing Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">${DELAY_MS}</stringProp>
+          </ConstantTimer>
+          <hashTree/>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

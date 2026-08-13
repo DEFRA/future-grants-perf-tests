@@ -31,7 +31,7 @@
         </collectionProp>
       </HeaderManager>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL_1" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_1</stringProp>
@@ -52,7 +52,7 @@
           </elementProp>
           <elementProp name="API_KEY" elementType="Argument">
             <stringProp name="Argument.name">API_KEY</stringProp>
-            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.value">llymCiiA8i90Z6R9CKbhElnlPEfJOdZm</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Leave empty for CDP execution. Set to your Developer API key for local testing.</stringProp>
           </elementProp>
@@ -113,7 +113,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Session Cookie Data">
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Session Cookie Data" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding">UTF-8</stringProp>
           <stringProp name="filename">../data/session-cookies.csv</stringProp>
@@ -375,7 +375,7 @@
             <stringProp name="HTTPSampler.domain">${BASE_URL_1}</stringProp>
             <stringProp name="HTTPSampler.port">0</stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
-            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/CHECK_CUSTOMER_DETAILS/status</stringProp>
+            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/CHECK_CUSTOMER_DETAILS/value</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -406,9 +406,9 @@
                   <stringProp name="Argument.value"></stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <elementProp name="status" elementType="HTTPArgument">
+                <elementProp name="value" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.name">status</stringProp>
+                  <stringProp name="Argument.name">value</stringProp>
                   <stringProp name="Argument.value">ACCEPTED</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -468,7 +468,7 @@
             <stringProp name="HTTPSampler.domain">${BASE_URL_1}</stringProp>
             <stringProp name="HTTPSampler.port">0</stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
-            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/REVIEW_LAND_RULES/status</stringProp>
+            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/REVIEW_LAND_RULES/value</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -499,9 +499,9 @@
                   <stringProp name="Argument.value"></stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <elementProp name="status" elementType="HTTPArgument">
+                <elementProp name="value" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.name">status</stringProp>
+                  <stringProp name="Argument.name">value</stringProp>
                   <stringProp name="Argument.value">ACCEPTED</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -534,7 +534,7 @@
             <hashTree/>
           </hashTree>
         </hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Check if any land parcels are within an SSSI" enabled="true">
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Check if any land parcels are within an SSSI" enabled="false">
           <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
@@ -561,7 +561,7 @@
             <stringProp name="HTTPSampler.domain">${BASE_URL_1}</stringProp>
             <stringProp name="HTTPSampler.port">0</stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
-            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/SSSI_CONSENT_REQUESTED/status</stringProp>
+            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/SSSI_CONSENT_REQUESTED/value</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -592,9 +592,9 @@
                   <stringProp name="Argument.value"></stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <elementProp name="status" elementType="HTTPArgument">
+                <elementProp name="value" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.name">status</stringProp>
+                  <stringProp name="Argument.name">value</stringProp>
                   <stringProp name="Argument.value">ACCEPTED</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -654,7 +654,7 @@
             <stringProp name="HTTPSampler.domain">${BASE_URL_1}</stringProp>
             <stringProp name="HTTPSampler.port">0</stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
-            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/PAYMENT_AMOUNT_CHECK/status</stringProp>
+            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/PAYMENT_AMOUNT_CHECK/value</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -685,9 +685,9 @@
                   <stringProp name="Argument.value"></stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <elementProp name="status" elementType="HTTPArgument">
+                <elementProp name="value" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.name">status</stringProp>
+                  <stringProp name="Argument.name">value</stringProp>
                   <stringProp name="Argument.value">ACCEPTED</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -747,7 +747,7 @@
             <stringProp name="HTTPSampler.domain">${BASE_URL_1}</stringProp>
             <stringProp name="HTTPSampler.port">0</stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
-            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/REVIEW_SCHEME_BUDGET/status</stringProp>
+            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/MANUAL_REVIEW_TASKS/tasks/REVIEW_SCHEME_BUDGET/value</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -778,9 +778,9 @@
                   <stringProp name="Argument.value"></stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
-                <elementProp name="status" elementType="HTTPArgument">
+                <elementProp name="value" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                  <stringProp name="Argument.name">status</stringProp>
+                  <stringProp name="Argument.name">value</stringProp>
                   <stringProp name="Argument.value">ACCEPTED</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
@@ -983,7 +983,7 @@
             <hashTree/>
           </hashTree>
         </hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Run calculations again" enabled="true">
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Run calculations again">
           <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>

@@ -6,7 +6,7 @@
         "@wdio/mocha-framework": "^9.23.0",
         "@wdio/spec-reporter": "^9.20.0",
         "@wdio/visual-service": "^9.1.0",
-        "chromedriver": "^148.0.4"
+        "chromedriver": "^151.0.5"
     },
     "scripts": {
         "wdio": "wdio run wdio.conf.js",

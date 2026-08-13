@@ -31,7 +31,7 @@
         </collectionProp>
       </HeaderManager>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL_1" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_1</stringProp>
@@ -65,7 +65,7 @@
           </elementProp>
           <elementProp name="API_KEY" elementType="Argument">
             <stringProp name="Argument.name">API_KEY</stringProp>
-            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.value">ZqTIZLlnyHulvUT6657B0Myj4sFOrqcN</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Leave empty for CDP. Set to your Developer API key for local testing.</stringProp>
           </elementProp>
@@ -109,7 +109,7 @@
         <boolProp name="CacheManager.controlledByThread">false</boolProp>
       </CacheManager>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="WMP Journey Thread Group">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="WMP Journey Thread Group" enabled="true">
         <intProp name="ThreadGroup.num_threads">10</intProp>
         <intProp name="ThreadGroup.ramp_time">10</intProp>
         <longProp name="ThreadGroup.duration">3600</longProp>
@@ -504,7 +504,7 @@
             <stringProp name="HTTPSampler.domain">${BASE_URL_1}</stringProp>
             <stringProp name="HTTPSampler.port">0</stringProp>
             <stringProp name="HTTPSampler.protocol">https</stringProp>
-            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/TASK_GROUP_AGREEMENT_PREPARATION/tasks/TASK_AGREEMENT_DELIVERY_TO_APPLICANT/status</stringProp>
+            <stringProp name="HTTPSampler.path">cases/${_id}/task-groups/TASK_GROUP_AGREEMENT_PREPARATION/tasks/TASK_AGREEMENT_DELIVERY_TO_APPLICANT/value</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">POST</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -516,18 +516,21 @@
                   <stringProp name="Argument.name">STATUS_AGREEMENT_NOT_SENT_TO_APPLICANT-comment</stringProp>
                   <stringProp name="Argument.value"></stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
                 <elementProp name="STATUS_AGREEMENT_SENT_TO_APPLICANT-comment" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
                   <stringProp name="Argument.name">STATUS_AGREEMENT_SENT_TO_APPLICANT-comment</stringProp>
                   <stringProp name="Argument.value">Enter the CRM reference number to confirm the draft agreement has been sent.</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
                 <elementProp name="status" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
                   <stringProp name="Argument.name">status</stringProp>
                   <stringProp name="Argument.value">STATUS_AGREEMENT_SENT_TO_APPLICANT</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
@@ -578,12 +581,14 @@
                   <stringProp name="Argument.name">ACTION_CONFIRM_AGREEMENT_SENT-comment</stringProp>
                   <stringProp name="Argument.value">Agreement ready for applicant comment for audit</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
                 <elementProp name="actionCode" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
                   <stringProp name="Argument.name">actionCode</stringProp>
                   <stringProp name="Argument.value">ACTION_CONFIRM_AGREEMENT_SENT</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
