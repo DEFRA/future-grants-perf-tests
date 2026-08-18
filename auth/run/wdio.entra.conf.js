@@ -66,6 +66,9 @@ export const config = {
     {
       maxInstances: 1,
       browserName: 'chrome',
+      // Force Classic WebDriver protocol — avoids BiDi browsingContext.navigate
+      // timeouts caused by Chromium updates in Alpine changing BiDi behaviour.
+      'wdio:enforceWebDriverClassic': true,
       'goog:chromeOptions': {
         args: debug
           ? [
@@ -78,7 +81,6 @@ export const config = {
               '--headless',
               '--disable-gpu',
               '--window-size=1920,1080',
-              '--enable-features=NetworkService,NetworkServiceInProcess',
               '--password-store=basic',
               '--use-mock-keychain',
               '--dns-prefetch-disable',
