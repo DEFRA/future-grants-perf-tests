@@ -19,7 +19,7 @@ echo "✓ Created fresh CSV file with header"
 for i in $(seq 1 $COUNT); do
     echo ""
     echo "=== Generating cookie $i/$COUNT ==="
-    LOCAL=${LOCAL:-true} npm run entra-login
+    LOCAL=true npm run entra-login
 
     if [ $? -ne 0 ]; then
         echo "❌ Failed to generate cookie $i"
