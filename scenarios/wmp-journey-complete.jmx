@@ -205,12 +205,12 @@ def url = "https://" + vars.get("BASE_URL_2") + vars.get("PATH_PREFIX") + "/case
 def status = prev.getResponseCode()
 def body = prev.getResponseDataAsString()
 def caseId = vars.get("_id")
-log.info("[Get Case ID by Ref] URL: " + url)
-log.info("[Get Case ID by Ref] HTTP status: " + status)
-log.info("[Get Case ID by Ref] Response body: " + body)
-log.info("[Get Case ID by Ref] Extracted _id: " + caseId)
+println("[Get Case ID by Ref] URL: " + url)
+println("[Get Case ID by Ref] HTTP status: " + status)
+println("[Get Case ID by Ref] Response body: " + body)
+println("[Get Case ID by Ref] Extracted _id: " + caseId)
 if ("NOT_FOUND".equals(caseId)) {
-  log.warn("[Get Case ID by Ref] FAILED to extract caseId for caseRef: " + vars.get("caseRef"))
+  println("[Get Case ID by Ref] FAILED to extract caseId for caseRef: " + vars.get("caseRef"))
 }
             </stringProp>
           </JSR223PostProcessor>

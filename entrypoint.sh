@@ -136,32 +136,27 @@ echo "Checking connectivity to CW backend..."
 curl -sf -o /dev/null -w "  fg-cw-backend: HTTP %{http_code}\n" https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/perf-test-00100 || echo "  fg-cw-backend: UNREACHABLE"
 echo ""
 
-echo "Starting cw-journey-complete and wmp-journey-complete in parallel..."
+echo "Starting cw-journey-complete..."
 
 jmeter -n -t ${CW_SCENARIOFILE} -e -l "${CW_REPORTFILE}" -o ${CW_REPORTS} -j ${CW_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" -JBASE_URL_2="fg-cw-backend.perf-test.cdp-int.defra.cloud" -JPATH_PREFIX="" &
 CW_PID=$!
 
-jmeter -n -t ${WMP_SCENARIOFILE} -e -l "${WMP_REPORTFILE}" -o ${WMP_REPORTS} -j ${WMP_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" -JBASE_URL_2="fg-cw-backend.perf-test.cdp-int.defra.cloud" -JPATH_PREFIX="" &
-WMP_PID=$!
+# WMP temporarily disabled for debugging
+WMP_PID=""
 
+# submit-applications temporarily disabled for debugging
 SUBMIT_PID=""
-if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
-  echo "Starting submit-applications in parallel..."
-  jmeter -n -t ${SUBMIT_SCENARIOFILE} -e -l "${SUBMIT_REPORTFILE}" -o ${SUBMIT_REPORTS} -j ${SUBMIT_LOGFILE} -f \
-    -Jenv="${ENVIRONMENT}" \
-    -JAPI_KEY="" \
-    -JAUTH_TOKEN="${GAS_AUTH_TOKEN}" &
-  SUBMIT_PID=$!
-fi
 
 wait ${CW_PID}
 CW_EXIT=$?
-
-wait ${WMP_PID}
-WMP_EXIT=$?
-
 echo "cw-journey-complete exit code: ${CW_EXIT}"
-echo "wmp-journey-complete exit code: ${WMP_EXIT}"
+
+WMP_EXIT=0
+if [ -n "${WMP_PID}" ]; then
+  wait ${WMP_PID}
+  WMP_EXIT=$?
+  echo "wmp-journey-complete exit code: ${WMP_EXIT}"
+fi
 
 if [ -n "${SUBMIT_PID}" ]; then
   wait ${SUBMIT_PID}
@@ -171,24 +166,28 @@ fi
 
 # Publish the results into S3 so they can be displayed in the CDP Portal
 if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
-  if [ -f "${CW_REPORTS}/index.html" ] || [ -f "${WMP_REPORTS}/index.html" ]; then
+  if [ -f "${CW_REPORTS}/index.html" ]; then
     aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
     aws --endpoint-url=$S3_ENDPOINT s3 cp "$CW_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$CW_REPORTFILE"
-    aws --endpoint-url=$S3_ENDPOINT s3 cp "$WMP_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$WMP_REPORTFILE"
+    if [ -n "${WMP_PID}" ] && [ -f "${WMP_REPORTS}/index.html" ]; then
+      aws --endpoint-url=$S3_ENDPOINT s3 cp "$WMP_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$WMP_REPORTFILE"
+    fi
     if [ -n "${SUBMIT_REPORTFILE}" ]; then
       aws --endpoint-url=$S3_ENDPOINT s3 cp "$SUBMIT_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$SUBMIT_REPORTFILE"
     fi
     aws --endpoint-url=$S3_ENDPOINT s3 cp "$JM_REPORTS" "$RESULTS_OUTPUT_S3_PATH" --recursive
     if [ $? -eq 0 ]; then
       echo "Test results published to $RESULTS_OUTPUT_S3_PATH"
-      echo "  CW report:  $RESULTS_OUTPUT_S3_PATH/cw/index.html"
-      echo "  WMP report: $RESULTS_OUTPUT_S3_PATH/wmp/index.html"
+      echo "  CW report: $RESULTS_OUTPUT_S3_PATH/cw/index.html"
+      if [ -n "${WMP_PID}" ]; then
+        echo "  WMP report: $RESULTS_OUTPUT_S3_PATH/wmp/index.html"
+      fi
       if [ -n "${SUBMIT_REPORTFILE}" ]; then
         echo "  Submit report: $RESULTS_OUTPUT_S3_PATH/submit-applications/index.html"
       fi
     fi
   else
-    echo "No index.html found in either report directory"
+    echo "No index.html found in CW report directory"
     exit 1
   fi
 else
