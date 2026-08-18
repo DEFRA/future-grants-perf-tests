@@ -96,27 +96,11 @@ WMP_LOGFILE=${JM_LOGS}/perftest-${WMP_SCENARIO}.log
 
 mkdir -p ${CW_REPORTS} ${WMP_REPORTS}
 
-echo "Starting cw-journey-complete and wmp-journey-complete in parallel..."
-
-jmeter -n -t ${CW_SCENARIOFILE} -e -l "${CW_REPORTFILE}" -o ${CW_REPORTS} -j ${CW_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" &
-CW_PID=$!
-
-jmeter -n -t ${WMP_SCENARIOFILE} -e -l "${WMP_REPORTFILE}" -o ${WMP_REPORTS} -j ${WMP_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" &
-WMP_PID=$!
-
-wait ${CW_PID}
-CW_EXIT=$?
-
-wait ${WMP_PID}
-WMP_EXIT=$?
-
-echo "cw-journey-complete exit code: ${CW_EXIT}"
-echo "wmp-journey-complete exit code: ${WMP_EXIT}"
-
 # ============================================
-# Optionally run submit-applications
+# Validate submit-applications prerequisites
 # ============================================
 SUBMIT_EXIT=0
+SUBMIT_REPORTFILE=""
 if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
   if [ -z "${GAS_AUTH_TOKEN}" ]; then
     echo "ERROR: GAS_AUTH_TOKEN is required when RUN_SUBMIT_APPLICATIONS=true"
@@ -130,17 +114,43 @@ if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
   SUBMIT_LOGFILE=${JM_LOGS}/perftest-${SUBMIT_SCENARIO}.log
 
   mkdir -p ${SUBMIT_REPORTS}
+fi
 
-  echo "Starting submit-applications..."
+# ============================================
+# Run all test suites in parallel
+# ============================================
+echo "Starting cw-journey-complete and wmp-journey-complete in parallel..."
 
+jmeter -n -t ${CW_SCENARIOFILE} -e -l "${CW_REPORTFILE}" -o ${CW_REPORTS} -j ${CW_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" &
+CW_PID=$!
+
+jmeter -n -t ${WMP_SCENARIOFILE} -e -l "${WMP_REPORTFILE}" -o ${WMP_REPORTS} -j ${WMP_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" &
+WMP_PID=$!
+
+SUBMIT_PID=""
+if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
+  echo "Starting submit-applications in parallel..."
   jmeter -n -t ${SUBMIT_SCENARIOFILE} -e -l "${SUBMIT_REPORTFILE}" -o ${SUBMIT_REPORTS} -j ${SUBMIT_LOGFILE} -f \
     -JBASE_URL="fg-gas-backend.perf-test.cdp-int.defra.cloud" \
     -JPATH_PREFIX="" \
     -JAPI_KEY="" \
     -JAUTH_TOKEN="${GAS_AUTH_TOKEN}" \
     -JTOTAL_APPLICATIONS="${TOTAL_APPLICATIONS:-600}" \
-    -JDELAY_MS="${DELAY_MS:-6000}"
+    -JDELAY_MS="${DELAY_MS:-6000}" &
+  SUBMIT_PID=$!
+fi
 
+wait ${CW_PID}
+CW_EXIT=$?
+
+wait ${WMP_PID}
+WMP_EXIT=$?
+
+echo "cw-journey-complete exit code: ${CW_EXIT}"
+echo "wmp-journey-complete exit code: ${WMP_EXIT}"
+
+if [ -n "${SUBMIT_PID}" ]; then
+  wait ${SUBMIT_PID}
   SUBMIT_EXIT=$?
   echo "submit-applications exit code: ${SUBMIT_EXIT}"
 fi

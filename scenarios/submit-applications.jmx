@@ -13,7 +13,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL</stringProp>
-            <stringProp name="Argument.value">${__P(BASE_URL,ephemeral-protected.api.perf-test.cdp-int.defra.cloud)}</stringProp>
+            <stringProp name="Argument.value">${__P(BASE_URL,fg-cw-frontend.perf-test.cdp-int.defra.cloud)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">CDP: fg-gas-backend.perf-test.cdp-int.defra.cloud | Local: ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
           </elementProp>
