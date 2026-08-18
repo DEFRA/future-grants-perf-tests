@@ -131,12 +131,9 @@ SUBMIT_PID=""
 if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
   echo "Starting submit-applications in parallel..."
   jmeter -n -t ${SUBMIT_SCENARIOFILE} -e -l "${SUBMIT_REPORTFILE}" -o ${SUBMIT_REPORTS} -j ${SUBMIT_LOGFILE} -f \
-    -JBASE_URL="fg-gas-backend.perf-test.cdp-int.defra.cloud" \
-    -JPATH_PREFIX="" \
+    -Jenv="${ENVIRONMENT}" \
     -JAPI_KEY="" \
-    -JAUTH_TOKEN="${GAS_AUTH_TOKEN}" \
-    -JTOTAL_APPLICATIONS="${TOTAL_APPLICATIONS:-600}" \
-    -JDELAY_MS="${DELAY_MS:-6000}" &
+    -JAUTH_TOKEN="${GAS_AUTH_TOKEN}" &
   SUBMIT_PID=$!
 fi
 
@@ -161,11 +158,17 @@ if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
     aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
     aws --endpoint-url=$S3_ENDPOINT s3 cp "$CW_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$CW_REPORTFILE"
     aws --endpoint-url=$S3_ENDPOINT s3 cp "$WMP_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$WMP_REPORTFILE"
+    if [ -n "${SUBMIT_REPORTFILE}" ]; then
+      aws --endpoint-url=$S3_ENDPOINT s3 cp "$SUBMIT_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$SUBMIT_REPORTFILE"
+    fi
     aws --endpoint-url=$S3_ENDPOINT s3 cp "$JM_REPORTS" "$RESULTS_OUTPUT_S3_PATH" --recursive
     if [ $? -eq 0 ]; then
       echo "Test results published to $RESULTS_OUTPUT_S3_PATH"
       echo "  CW report:  $RESULTS_OUTPUT_S3_PATH/cw/index.html"
       echo "  WMP report: $RESULTS_OUTPUT_S3_PATH/wmp/index.html"
+      if [ -n "${SUBMIT_REPORTFILE}" ]; then
+        echo "  Submit report: $RESULTS_OUTPUT_S3_PATH/submit-applications/index.html"
+      fi
     fi
   else
     echo "No index.html found in either report directory"

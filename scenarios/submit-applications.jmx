@@ -11,11 +11,17 @@
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="BASE_URL" elementType="Argument">
-            <stringProp name="Argument.name">BASE_URL</stringProp>
-            <stringProp name="Argument.value">${__P(BASE_URL,fg-cw-frontend.perf-test.cdp-int.defra.cloud)}</stringProp>
+          <elementProp name="BASE_URL_1" elementType="Argument">
+            <stringProp name="Argument.name">BASE_URL_1</stringProp>
+            <stringProp name="Argument.value">fg-gas-backend.perf-test.cdp-int.defra.cloud</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">CDP: fg-gas-backend.perf-test.cdp-int.defra.cloud | Local: ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.desc">GAS Backend (CDP)</stringProp>
+          </elementProp>
+          <elementProp name="BASE_URL_2" elementType="Argument">
+            <stringProp name="Argument.name">BASE_URL_2</stringProp>
+            <stringProp name="Argument.value">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">GAS Backend (local/ephemeral)</stringProp>
           </elementProp>
           <elementProp name="PATH_PREFIX" elementType="Argument">
             <stringProp name="Argument.name">PATH_PREFIX</stringProp>
@@ -31,15 +37,9 @@
           </elementProp>
           <elementProp name="AUTH_TOKEN" elementType="Argument">
             <stringProp name="Argument.name">AUTH_TOKEN</stringProp>
-            <stringProp name="Argument.value">${__P(AUTH_TOKEN,)}</stringProp>
+            <stringProp name="Argument.value">${__P(AUTH_TOKEN,replaceme)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Bearer token for GAS authorisation. Set via -JAUTH_TOKEN on CDP or override locally.</stringProp>
-          </elementProp>
-          <elementProp name="TOTAL_APPLICATIONS" elementType="Argument">
-            <stringProp name="Argument.name">TOTAL_APPLICATIONS</stringProp>
-            <stringProp name="Argument.value">${__P(TOTAL_APPLICATIONS,60)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">Total number of applications to submit</stringProp>
           </elementProp>
           <elementProp name="DELAY_MS" elementType="Argument">
             <stringProp name="Argument.name">DELAY_MS</stringProp>
@@ -75,17 +75,20 @@ log.info(&quot;Run ID set to: &quot; + runId)</stringProp>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Submit Applications" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">0</intProp>
+        <longProp name="ThreadGroup.duration">600</longProp>
+        <longProp name="ThreadGroup.delay">0</longProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController">
-          <stringProp name="LoopController.loops">${TOTAL_APPLICATIONS}</stringProp>
+          <intProp name="LoopController.loops">-1</intProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
         <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Application Counter" enabled="true">
           <stringProp name="CounterConfig.start">1</stringProp>
-          <stringProp name="CounterConfig.end">${TOTAL_APPLICATIONS}</stringProp>
+          <stringProp name="CounterConfig.end">999999</stringProp>
           <stringProp name="CounterConfig.incr">1</stringProp>
           <stringProp name="CounterConfig.name">counter</stringProp>
           <stringProp name="CounterConfig.format">00000</stringProp>
@@ -93,7 +96,7 @@ log.info(&quot;Run ID set to: &quot; + runId)</stringProp>
         </CounterConfig>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Submit Application" enabled="true">
-          <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+          <stringProp name="HTTPSampler.domain">${BASE_URL_2}</stringProp>
           <stringProp name="HTTPSampler.port">0</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.path">${PATH_PREFIX}/grants/frps-private-beta/applications</stringProp>
