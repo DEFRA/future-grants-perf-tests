@@ -81,6 +81,7 @@ export const config = {
               '--headless',
               '--disable-gpu',
               '--window-size=1920,1080',
+              '--enable-features=NetworkService,NetworkServiceInProcess',
               '--password-store=basic',
               '--use-mock-keychain',
               '--dns-prefetch-disable',
@@ -90,6 +91,10 @@ export const config = {
               '--disable-dev-shm-usage'
             ]
       },
+      // Use 'eager' so browser.url() returns on DOMContentLoaded rather than
+      // waiting for all external resources (fonts, CDN scripts etc.) to load.
+      // Prevents indefinite hangs when Microsoft/CDN resources are slow in CDP.
+      pageLoadStrategy: 'eager',
       // Only use proxy in CDP environment (not locally)
       ...(debug || local ? {} : {
         proxy: {
