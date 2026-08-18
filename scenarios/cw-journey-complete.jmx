@@ -167,6 +167,23 @@
             <stringProp name="JSONPostProcessor.defaultValues">NOT_FOUND</stringProp>
           </JSONPostProcessor>
           <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Log Case ID Lookup" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="script">
+def url = "https://" + vars.get("BASE_URL_2") + vars.get("PATH_PREFIX") + "/cases/ref/" + vars.get("caseRef")
+def status = prev.getResponseCode()
+def body = prev.getResponseDataAsString()
+def caseId = vars.get("_id")
+log.info("[Get Case ID by Ref] URL: " + url)
+log.info("[Get Case ID by Ref] HTTP status: " + status)
+log.info("[Get Case ID by Ref] Response body: " + body)
+log.info("[Get Case ID by Ref] Extracted _id: " + caseId)
+if ("NOT_FOUND".equals(caseId)) {
+  log.warn("[Get Case ID by Ref] FAILED to extract caseId for caseRef: " + vars.get("caseRef"))
+}
+            </stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
         </hashTree>
         <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Test" enabled="true">
           <boolProp name="TransactionController.includeTimers">false</boolProp>

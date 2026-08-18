@@ -119,6 +119,23 @@ fi
 # ============================================
 # Run all test suites in parallel
 # ============================================
+echo ""
+echo "========================================"
+echo "JMeter configuration"
+echo "========================================"
+echo "  ENVIRONMENT:             ${ENVIRONMENT}"
+echo "  USER_COUNT:              ${USER_COUNT}"
+echo "  RAMP_UP_PERIOD_SECONDS:  ${RAMP_UP_PERIOD_SECONDS}"
+echo "  DURATION_SECONDS:        ${DURATION_SECONDS}"
+echo "  DATA dir:                ${JM_DATA}"
+echo "  RUN_SUBMIT_APPLICATIONS: ${RUN_SUBMIT_APPLICATIONS}"
+echo "========================================"
+echo ""
+
+echo "Checking connectivity to CW backend..."
+curl -sf -o /dev/null -w "  fg-cw-backend: HTTP %{http_code}\n" https://fg-cw-backend.perf-test.cdp-int.defra.cloud/cases/ref/perf-test-00100 || echo "  fg-cw-backend: UNREACHABLE"
+echo ""
+
 echo "Starting cw-journey-complete and wmp-journey-complete in parallel..."
 
 jmeter -n -t ${CW_SCENARIOFILE} -e -l "${CW_REPORTFILE}" -o ${CW_REPORTS} -j ${CW_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" -JBASE_URL_2="fg-cw-backend.perf-test.cdp-int.defra.cloud" -JPATH_PREFIX="" &
