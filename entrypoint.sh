@@ -113,6 +113,38 @@ WMP_EXIT=$?
 echo "cw-journey-complete exit code: ${CW_EXIT}"
 echo "wmp-journey-complete exit code: ${WMP_EXIT}"
 
+# ============================================
+# Optionally run submit-applications
+# ============================================
+SUBMIT_EXIT=0
+if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
+  if [ -z "${GAS_AUTH_TOKEN}" ]; then
+    echo "ERROR: GAS_AUTH_TOKEN is required when RUN_SUBMIT_APPLICATIONS=true"
+    exit 1
+  fi
+
+  SUBMIT_SCENARIO=submit-applications
+  SUBMIT_SCENARIOFILE=${JM_SCENARIOS}/${SUBMIT_SCENARIO}.jmx
+  SUBMIT_REPORTFILE=${NOW}-perftest-${SUBMIT_SCENARIO}-report.csv
+  SUBMIT_REPORTS=${JM_REPORTS}/submit-applications
+  SUBMIT_LOGFILE=${JM_LOGS}/perftest-${SUBMIT_SCENARIO}.log
+
+  mkdir -p ${SUBMIT_REPORTS}
+
+  echo "Starting submit-applications..."
+
+  jmeter -n -t ${SUBMIT_SCENARIOFILE} -e -l "${SUBMIT_REPORTFILE}" -o ${SUBMIT_REPORTS} -j ${SUBMIT_LOGFILE} -f \
+    -JBASE_URL="fg-gas-backend.perf-test.cdp-int.defra.cloud" \
+    -JPATH_PREFIX="" \
+    -JAPI_KEY="" \
+    -JAUTH_TOKEN="${GAS_AUTH_TOKEN}" \
+    -JTOTAL_APPLICATIONS="${TOTAL_APPLICATIONS:-600}" \
+    -JDELAY_MS="${DELAY_MS:-6000}"
+
+  SUBMIT_EXIT=$?
+  echo "submit-applications exit code: ${SUBMIT_EXIT}"
+fi
+
 # Publish the results into S3 so they can be displayed in the CDP Portal
 if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
   if [ -f "${CW_REPORTS}/index.html" ] || [ -f "${WMP_REPORTS}/index.html" ]; then
@@ -142,6 +174,10 @@ if grep -q ',false,' "${CW_REPORTFILE}" 2>/dev/null; then
 fi
 if grep -q ',false,' "${WMP_REPORTFILE}" 2>/dev/null; then
   echo "wmp-journey-complete CONTAINS FAILURES"
+  FAILURES=1
+fi
+if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ] && grep -q ',false,' "${SUBMIT_REPORTFILE}" 2>/dev/null; then
+  echo "submit-applications CONTAINS FAILURES"
   FAILURES=1
 fi
 if [ ${FAILURES} -eq 1 ]; then

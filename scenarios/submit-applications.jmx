@@ -13,37 +13,37 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL</stringProp>
-            <stringProp name="Argument.value">ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
+            <stringProp name="Argument.value">${__P(BASE_URL,ephemeral-protected.api.perf-test.cdp-int.defra.cloud)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">CDP: fg-gas-backend.perf-test.cdp-int.defra.cloud | Local: ephemeral-protected.api.perf-test.cdp-int.defra.cloud</stringProp>
           </elementProp>
           <elementProp name="PATH_PREFIX" elementType="Argument">
             <stringProp name="Argument.name">PATH_PREFIX</stringProp>
-            <stringProp name="Argument.value">/fg-gas-backend</stringProp>
+            <stringProp name="Argument.value">${__P(PATH_PREFIX,/fg-gas-backend)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">CDP: (empty) | Local: /fg-gas-backend</stringProp>
           </elementProp>
           <elementProp name="API_KEY" elementType="Argument">
             <stringProp name="Argument.name">API_KEY</stringProp>
-            <stringProp name="Argument.value">llymCiiA8i90Z6R9CKbhElnlPEfJOdZm</stringProp>
+            <stringProp name="Argument.value">${__P(API_KEY,replaceme)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Leave empty for CDP execution. Set to your Developer API key for local testing.</stringProp>
           </elementProp>
           <elementProp name="AUTH_TOKEN" elementType="Argument">
             <stringProp name="Argument.name">AUTH_TOKEN</stringProp>
-            <stringProp name="Argument.value">99731eaa-43e6-44fe-a18c-25385c1a3a93</stringProp>
+            <stringProp name="Argument.value">${__P(AUTH_TOKEN,)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.desc">Bearer token for GAS authorisation</stringProp>
+            <stringProp name="Argument.desc">Bearer token for GAS authorisation. Set via -JAUTH_TOKEN on CDP or override locally.</stringProp>
           </elementProp>
           <elementProp name="TOTAL_APPLICATIONS" elementType="Argument">
             <stringProp name="Argument.name">TOTAL_APPLICATIONS</stringProp>
-            <stringProp name="Argument.value">60</stringProp>
+            <stringProp name="Argument.value">${__P(TOTAL_APPLICATIONS,60)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Total number of applications to submit</stringProp>
           </elementProp>
           <elementProp name="DELAY_MS" elementType="Argument">
             <stringProp name="Argument.name">DELAY_MS</stringProp>
-            <stringProp name="Argument.value">600</stringProp>
+            <stringProp name="Argument.value">${__P(DELAY_MS,600)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">Delay between requests in ms. Formula: (DURATION_HOURS * 3600000) / TOTAL_APPLICATIONS. Default: 1hr / 600 = 6000ms</stringProp>
           </elementProp>
@@ -259,7 +259,7 @@ log.info(&quot;Run ID set to: &quot; + runId)</stringProp>
           </ConstantTimer>
           <hashTree/>
         </hashTree>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
