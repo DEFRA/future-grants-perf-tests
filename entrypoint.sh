@@ -141,11 +141,17 @@ echo "Starting cw-journey-complete..."
 jmeter -n -t ${CW_SCENARIOFILE} -e -l "${CW_REPORTFILE}" -o ${CW_REPORTS} -j ${CW_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" -JBASE_URL_2="fg-cw-backend.perf-test.cdp-int.defra.cloud" &
 CW_PID=$!
 
-# WMP temporarily disabled for debugging
-WMP_PID=""
+echo "Starting wmp-journey-complete..."
 
-# submit-applications temporarily disabled for debugging
+jmeter -n -t ${WMP_SCENARIOFILE} -e -l "${WMP_REPORTFILE}" -o ${WMP_REPORTS} -j ${WMP_LOGFILE} -f -Jenv="${ENVIRONMENT}" -Jcsv_path="${JM_DATA}" -Juser_count="${USER_COUNT}" -Jramp_up_period_seconds="${RAMP_UP_PERIOD_SECONDS}" -Jduration_seconds="${DURATION_SECONDS}" -JBASE_URL_2="fg-cw-backend.perf-test.cdp-int.defra.cloud" &
+WMP_PID=$!
+
 SUBMIT_PID=""
+if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ]; then
+  echo "Starting submit-applications..."
+  jmeter -n -t ${SUBMIT_SCENARIOFILE} -e -l "${SUBMIT_REPORTFILE}" -o ${SUBMIT_REPORTS} -j ${SUBMIT_LOGFILE} -f -Jenv="${ENVIRONMENT}" -JAUTH_TOKEN="${GAS_AUTH_TOKEN}" &
+  SUBMIT_PID=$!
+fi
 
 wait ${CW_PID}
 CW_EXIT=$?
@@ -164,18 +170,35 @@ if [ -n "${SUBMIT_PID}" ]; then
   echo "submit-applications exit code: ${SUBMIT_EXIT}"
 fi
 
+# ============================================
+# Generate combined report from all scenarios
+# ============================================
+COMBINED_REPORTFILE=${NOW}-perftest-combined-report.csv
+COMBINED_REPORTS=${JM_REPORTS}/combined
+
+echo "Merging result CSVs..."
+cp "${CW_REPORTFILE}" "${COMBINED_REPORTFILE}"
+tail -n +2 "${WMP_REPORTFILE}" >> "${COMBINED_REPORTFILE}"
+if [ -n "${SUBMIT_REPORTFILE}" ]; then
+  tail -n +2 "${SUBMIT_REPORTFILE}" >> "${COMBINED_REPORTFILE}"
+fi
+
+echo "Generating combined report..."
+mkdir -p "${COMBINED_REPORTS}"
+jmeter -g "${COMBINED_REPORTFILE}" -o "${COMBINED_REPORTS}"
+
 # Publish the results into S3 so they can be displayed in the CDP Portal
 if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
-  if [ -f "${CW_REPORTS}/index.html" ]; then
+  if [ -f "${COMBINED_REPORTS}/index.html" ]; then
     aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
-    aws --endpoint-url=$S3_ENDPOINT s3 cp "$CW_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$CW_REPORTFILE"
-    aws --endpoint-url=$S3_ENDPOINT s3 cp "${CW_REPORTS}" "$RESULTS_OUTPUT_S3_PATH" --recursive
+    aws --endpoint-url=$S3_ENDPOINT s3 cp "${COMBINED_REPORTFILE}" "$RESULTS_OUTPUT_S3_PATH/${COMBINED_REPORTFILE}"
+    aws --endpoint-url=$S3_ENDPOINT s3 cp "${COMBINED_REPORTS}" "$RESULTS_OUTPUT_S3_PATH" --recursive
     if [ $? -eq 0 ]; then
       echo "Test results published to $RESULTS_OUTPUT_S3_PATH"
-      echo "  CW report: $RESULTS_OUTPUT_S3_PATH/index.html"
+      echo "  Combined report: $RESULTS_OUTPUT_S3_PATH/index.html"
     fi
   else
-    echo "No index.html found in CW report directory"
+    echo "No index.html found in combined report directory"
     exit 1
   fi
 else
@@ -183,21 +206,8 @@ else
   exit 1
 fi
 
-# Exit non-zero if either test had failures
-FAILURES=0
-if grep -q ',false,' "${CW_REPORTFILE}" 2>/dev/null; then
-  echo "cw-journey-complete CONTAINS FAILURES"
-  FAILURES=1
-fi
-if grep -q ',false,' "${WMP_REPORTFILE}" 2>/dev/null; then
-  echo "wmp-journey-complete CONTAINS FAILURES"
-  FAILURES=1
-fi
-if [ "${RUN_SUBMIT_APPLICATIONS}" = "true" ] && grep -q ',false,' "${SUBMIT_REPORTFILE}" 2>/dev/null; then
-  echo "submit-applications CONTAINS FAILURES"
-  FAILURES=1
-fi
-if [ ${FAILURES} -eq 1 ]; then
+# Exit non-zero if any test had failures
+if grep -q ',false,' "${COMBINED_REPORTFILE}" 2>/dev/null; then
   echo "RESULTS CONTAIN FAILURES, EXITING NON-ZERO"
   exit 1
 fi
