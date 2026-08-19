@@ -169,22 +169,10 @@ if [ -n "$RESULTS_OUTPUT_S3_PATH" ]; then
   if [ -f "${CW_REPORTS}/index.html" ]; then
     aws --endpoint-url=$S3_ENDPOINT s3 rm "$RESULTS_OUTPUT_S3_PATH" --recursive
     aws --endpoint-url=$S3_ENDPOINT s3 cp "$CW_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$CW_REPORTFILE"
-    if [ -n "${WMP_PID}" ] && [ -f "${WMP_REPORTS}/index.html" ]; then
-      aws --endpoint-url=$S3_ENDPOINT s3 cp "$WMP_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$WMP_REPORTFILE"
-    fi
-    if [ -n "${SUBMIT_REPORTFILE}" ]; then
-      aws --endpoint-url=$S3_ENDPOINT s3 cp "$SUBMIT_REPORTFILE" "$RESULTS_OUTPUT_S3_PATH/$SUBMIT_REPORTFILE"
-    fi
-    aws --endpoint-url=$S3_ENDPOINT s3 cp "$JM_REPORTS" "$RESULTS_OUTPUT_S3_PATH" --recursive
+    aws --endpoint-url=$S3_ENDPOINT s3 cp "${CW_REPORTS}" "$RESULTS_OUTPUT_S3_PATH" --recursive
     if [ $? -eq 0 ]; then
       echo "Test results published to $RESULTS_OUTPUT_S3_PATH"
-      echo "  CW report: $RESULTS_OUTPUT_S3_PATH/cw/index.html"
-      if [ -n "${WMP_PID}" ]; then
-        echo "  WMP report: $RESULTS_OUTPUT_S3_PATH/wmp/index.html"
-      fi
-      if [ -n "${SUBMIT_REPORTFILE}" ]; then
-        echo "  Submit report: $RESULTS_OUTPUT_S3_PATH/submit-applications/index.html"
-      fi
+      echo "  CW report: $RESULTS_OUTPUT_S3_PATH/index.html"
     fi
   else
     echo "No index.html found in CW report directory"
